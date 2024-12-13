@@ -175,7 +175,7 @@ dependencies {
     implementation("org.apache.felix:org.apache.felix.resolver:2.0.4")
 
     implementation("net.logstash.logback:logstash-logback-encoder:7.4")
-    implementation("io.sentry:sentry-logback:7.11.0")
+    implementation("io.sentry:sentry-logback:7.19.0")
 
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin")
 
