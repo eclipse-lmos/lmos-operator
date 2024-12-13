@@ -1,0 +1,23 @@
+#
+# SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+apiVersion: lmos.eclipse/v1
+kind: Channel
+metadata:
+  name: acme-ivr-canary
+  labels:
+    channel: ivr
+    version: 1.1.0
+    tenant: acme
+    subset: canary
+spec:
+  requiredCapabilities:
+    - name: view-bill
+      version: "1.1.0"
+    - name: download-bill
+      version: ">=1.1.0"
+    - name: view-contract
+      version: ">=1.1.0"

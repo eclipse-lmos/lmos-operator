@@ -1,0 +1,35 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: {{ include "lmos-operator.fullname" . }}
+  labels:
+    {{- include "lmos-operator.labels" . | nindent 4 }}
+spec:
+  hosts:
+    - {{ include "lmos-operator.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
+  http:
+    {{- range $namespace := .Values.clientNamespaces }}
+    - match:
+        - sourceNamespace: {{ $namespace | quote}}
+      route:
+        - weight: 100
+          destination:
+            host: {{ include "lmos-operator.fullname" $ }}.{{ $.Release.Namespace }}.svc.cluster.local
+            port:
+              number: 8080
+          headers:
+            request:
+              set:
+                x-namespace: {{ $namespace | quote }}
+                x-subset: "stable"
+        - weight: 0
+          destination:
+            host: {{ include "lmos-operator.fullname" $ }}.{{ $.Release.Namespace }}.svc.cluster.local
+            port:
+              number: 8080
+          headers:
+            request:
+              set:
+                x-namespace: {{ $namespace | quote }}
+                x-subset: "canary"
+    {{- end }}

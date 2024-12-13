@@ -1,0 +1,24 @@
+#
+# SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+apiVersion: lmos.eclipse/v1
+kind: Channel
+metadata:
+  name: acme-ivr-stable
+  labels:
+    channel: ivr
+    version: 1.0.0
+    tenant: acme
+    subset: stable
+spec:
+  requiredCapabilities:
+    - name: view-bill
+      version: "1.0.0"
+    - name: download-bill
+      version: ">=1.0.0"
+      strategy: HIGHEST
+    - name: view-contract
+      version: ">=1.0.0"

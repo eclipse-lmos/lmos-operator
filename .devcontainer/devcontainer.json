@@ -1,0 +1,15 @@
+{
+  "name": "lmos-operator",
+  "image": "mcr.microsoft.com/devcontainers/java:21",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vscjava.vscode-spring-boot-dashboard",
+        "vscjava.vscode-java-test",
+        "pivotal.vscode-boot-dev-pack"
+      ]
+    }
+  },
+  "postCreateCommand": "./gradlew build && ./gradlew bootRun"
+}

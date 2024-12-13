@@ -1,0 +1,48 @@
+#
+# SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+apiVersion: "lmos.eclipse/v1"
+kind: "ChannelRouting"
+metadata:
+  creationTimestamp: "2024-07-23T13:15:25.489340700Z"
+  generation: 1
+  labels:
+    tenant: "acme"
+    channel: "web"
+    subset: "stable"
+    version: "1.0.0"
+  name: "acme-web-stable"
+  namespace: "test"
+  ownerReferences:
+    - apiVersion: "lmos.eclipse/v1"
+      kind: "Channel"
+      name: "acme-web-stable"
+      uid: "00000000-0000-0000-0000-000000000055"
+  resourceVersion: "8"
+  uid: "00000000-0000-0000-0000-000000000062"
+spec:
+  capabilityGroups:
+    - name: "billing-agent"
+      description: "This is the billing agent description"
+      capabilities:
+        - name: "view-bill"
+          requiredVersion: "1.0.0"
+          providedVersion: "1.0.0"
+          description: "Capability to view a bill"
+          host: "billing-agent-stable.svc.cluster.local"
+        - name: "download-bill"
+          requiredVersion: ">=1.0.0"
+          providedVersion: "1.1.0"
+          description: "Capability to download a bill"
+          host: "billing-agent-stable.svc.cluster.local"
+    - name: "contract-agent"
+      description: "This is the contract agent description"
+      capabilities:
+        - name: "view-contract"
+          requiredVersion: ">=1.0.0"
+          providedVersion: "1.1.0"
+          description: "Capability to view a contract"
+          host: "contract-agent-stable.test.svc.cluster.local"

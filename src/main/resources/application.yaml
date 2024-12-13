@@ -1,0 +1,58 @@
+#
+# SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+spring:
+  application:
+    name: lmos-api-server
+  main:
+    banner-mode: off
+
+javaoperatorsdk:
+  cache-sync-timeout: 17d
+  close-client-on-stop: false
+  stop-on-informer-error-during-startup: false
+  check-crd-and-validate-local-model: false
+  concurrent-reconciliation-threads: 60
+  min-concurrent-reconciliation-threads: 22
+  concurrent-workflow-executor-threads: 32
+  min-concurrent-workflow-executor-threads: 12
+  crd:
+    apply-on-startup: true
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework: WARN
+      apache: WARN
+    io:
+      javaoperatorsdk:
+        operator:
+          Operator: WARN
+    ai:
+      ancf:
+        lmos:
+          operator:
+            OperatorApplicationKt: WARN
+
+management:
+  server:
+    port: 9090
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: prometheus,metrics,info,health
+  endpoint:
+    metrics:
+      access: read_only
+    health:
+      probes:
+        enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
