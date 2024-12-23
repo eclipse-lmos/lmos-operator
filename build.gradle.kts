@@ -187,7 +187,7 @@ dependencies {
     implementation("io.fabric8:generator-annotations:6.13.4")
 
     implementation("net.logstash.logback:logstash-logback-encoder:7.4")
-    implementation("io.sentry:sentry-logback:7.11.0")
+    implementation("io.sentry:sentry-logback:7.19.1")
 
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin")
 
