@@ -15,7 +15,7 @@ metadata:
     subset: "stable"
     version: "1.0.0"
   name: "acme-web-stable"
-  namespace: "test"
+  namespace: "default"
   ownerReferences:
     - apiVersion: "lmos.eclipse/v1"
       kind: "Channel"

@@ -23,7 +23,7 @@ class AgentResolver : Resolver<AgentResource> {
         val agentResources = resolveContext.availableResources
 
         if (agentResources.isEmpty()) {
-            throw ResolverException(requiredCapabilities)
+            throw ResolverException(emptySet(), requiredCapabilities)
         }
 
         val bestMatchingCapabilities = mutableSetOf<Wire<AgentResource>>()
@@ -49,7 +49,7 @@ class AgentResolver : Resolver<AgentResource> {
             },
         )
         if (unresolvedRequiredCapabilities.isNotEmpty()) {
-            throw ResolverException(unresolvedRequiredCapabilities)
+            throw ResolverException(bestMatchingCapabilities, unresolvedRequiredCapabilities)
         }
 
         return bestMatchingCapabilities

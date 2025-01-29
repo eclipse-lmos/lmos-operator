@@ -7,7 +7,6 @@
 package org.eclipse.lmos.operator.reconciler
 
 import io.javaoperatorsdk.operator.api.reconciler.Context
-import io.javaoperatorsdk.operator.processing.dependent.kubernetes.BooleanWithUndefined
 import io.javaoperatorsdk.operator.processing.dependent.kubernetes.CRUDKubernetesDependentResource
 import io.javaoperatorsdk.operator.processing.dependent.kubernetes.KubernetesDependent
 import org.eclipse.lmos.operator.reconciler.filter.AgentResourcesFilter
@@ -19,12 +18,11 @@ import org.eclipse.lmos.operator.resources.AgentResource
 import org.eclipse.lmos.operator.resources.ChannelResource
 import org.eclipse.lmos.operator.resources.ChannelRoutingResource
 import org.eclipse.lmos.operator.resources.ChannelStatus
-import org.eclipse.lmos.operator.resources.Labels
 import org.eclipse.lmos.operator.resources.ResolveStatus
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-@KubernetesDependent(useSSA = BooleanWithUndefined.FALSE)
+@KubernetesDependent
 class ChannelDependentResource :
     CRUDKubernetesDependentResource<ChannelRoutingResource, ChannelResource>(ChannelRoutingResource::class.java) {
     private val log: Logger = LoggerFactory.getLogger(javaClass)
@@ -63,10 +61,11 @@ class ChannelDependentResource :
         } catch (e: ResolverException) {
             // ChannelRoutingResource must be created because this method is not allowed to return null or throw an exception :(
             val channelRoutingResource =
-                RoutingChannelGenerator.createChannelRoutingResource(channelResource, emptySet())
+                RoutingChannelGenerator.createChannelRoutingResource(channelResource, e.getResolvedWireCapabilities())
             log.error("Resolve failed for channel ${channelResource.metadata.name} in namespace $namespace", e)
             channelResource.status = ChannelStatus(ResolveStatus.UNRESOLVED, e.getUnresolvedRequiredCapabilities())
             return channelRoutingResource
         }
     }
+
 }

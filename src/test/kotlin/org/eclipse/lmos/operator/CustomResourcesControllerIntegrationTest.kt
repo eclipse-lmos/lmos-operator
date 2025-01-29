@@ -7,12 +7,12 @@
 package org.eclipse.lmos.operator
 
 import io.fabric8.kubernetes.client.KubernetesClient
-import io.fabric8.kubernetes.client.server.mock.EnableKubernetesMockClient
 import org.assertj.core.api.Assertions
 import org.eclipse.lmos.operator.resources.ChannelResource
 import org.eclipse.lmos.operator.resources.ChannelRoutingResource
 import org.eclipse.lmos.operator.server.routing.X_NAMESPACE_HEADER
 import org.eclipse.lmos.operator.server.routing.X_SUBSET_HEADER
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
@@ -42,6 +42,12 @@ class CustomResourcesControllerIntegrationTest {
     @Autowired
     private lateinit var client: KubernetesClient
 
+    @AfterEach
+    fun cleanUp() {
+        client.resources(ChannelResource::class.java).delete()
+        client.resources(ChannelRoutingResource::class.java).delete()
+    }
+
     @Test
     fun shouldReturnChannels() {
         // Given I create two Channel resources
@@ -54,7 +60,7 @@ class CustomResourcesControllerIntegrationTest {
                 .get()
                 .uri("/apis/v1/tenants/acme/channels")
                 .header(X_SUBSET_HEADER, "stable")
-                .header(X_NAMESPACE_HEADER, "test")
+                .header(X_NAMESPACE_HEADER, "default")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(ChannelResource::class.java).returnResult()
@@ -76,7 +82,7 @@ class CustomResourcesControllerIntegrationTest {
                 .get()
                 .uri("/apis/v1/tenants/acme/channels/web")
                 .header(X_SUBSET_HEADER, "stable")
-                .header(X_NAMESPACE_HEADER, "test")
+                .header(X_NAMESPACE_HEADER, "default")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(ChannelResource::class.java).returnResult()
@@ -99,7 +105,7 @@ class CustomResourcesControllerIntegrationTest {
                 .get()
                 .uri("/apis/v1/tenants/acme/channels/web/routing")
                 .header(X_SUBSET_HEADER, "stable")
-                .header(X_NAMESPACE_HEADER, "test")
+                .header(X_NAMESPACE_HEADER, "default")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(ChannelRoutingResource::class.java).returnResult()
@@ -121,7 +127,7 @@ class CustomResourcesControllerIntegrationTest {
             .get()
             .uri("/apis/v1/tenants/de/channels/unknown/routing")
             .header(X_SUBSET_HEADER, "stable")
-            .header(X_NAMESPACE_HEADER, "test")
+            .header(X_NAMESPACE_HEADER, "default")
             .exchange()
             .expectStatus().isNotFound()
     }

@@ -6,6 +6,7 @@
 
 package org.eclipse.lmos.operator.resolver
 
+import org.eclipse.lmos.operator.resources.AgentResource
 import org.eclipse.lmos.operator.resources.RequiredCapability
 import java.util.Collections
 
@@ -18,39 +19,45 @@ import java.util.Collections
  * [.getUnresolvedRequiredCapabilities] method.
  */
 class ResolverException : Exception {
+    private val resolvedWiredCapabilities: Set<Wire<AgentResource>>
     private val unresolvedRequiredCapabilities: Set<RequiredCapability>
 
     /**
-     * Create a `ResolutionException` with the specified unresolved required capabilities.
+     * Create a [ResolverException] with the wired and unresolved capabilities.
      *
+     * @param resolvedWiredCapabilities The resolved wired capabilities.
      * @param unresolvedRequiredCapabilities The unresolved required capabilities.
      */
-    constructor(unresolvedRequiredCapabilities: Set<RequiredCapability>) : super(
+    constructor(resolvedWiredCapabilities: Set<Wire<AgentResource>>, unresolvedRequiredCapabilities: Set<RequiredCapability>) : super(
         "Required capabilities not resolved: ${unresolvedRequiredCapabilities.joinToString(", ") { it.toString() }}"
     ) {
+        this.resolvedWiredCapabilities = resolvedWiredCapabilities
         this.unresolvedRequiredCapabilities = Collections.unmodifiableSet(unresolvedRequiredCapabilities)
     }
 
     /**
-     * Create a `ResolutionException` with the specified cause.
+     * Create a [ResolverException] with the specified cause.
      *
      * @param cause The cause of this exception.
      */
     constructor(cause: Throwable?) : super(cause) {
+        this.resolvedWiredCapabilities = emptySet()
         this.unresolvedRequiredCapabilities = emptySet()
     }
 
     /**
-     * Create a `ResolutionException` with the specified message, cause, and unresolved required capabilities.
+     * Create a [ResolverException] with the specified message, cause, wired and unresolved capabilities.
      *
      * @param message The message.
      * @param cause The cause of this exception.
+     * @param resolvedWiredCapabilities The resolved wired capabilities.
      * @param unresolvedRequiredCapabilities The unresolved required capabilities.
      */
-    constructor(message: String, cause: Throwable, unresolvedRequiredCapabilities: Set<RequiredCapability>) : super(
+    constructor(message: String, cause: Throwable, resolvedWiredCapabilities: Set<Wire<AgentResource>>, unresolvedRequiredCapabilities: Set<RequiredCapability>) : super(
         message,
         cause
     ) {
+        this.resolvedWiredCapabilities = resolvedWiredCapabilities
         this.unresolvedRequiredCapabilities = Collections.unmodifiableSet(unresolvedRequiredCapabilities)
     }
 
@@ -63,5 +70,15 @@ class ResolverException : Exception {
      */
     fun getUnresolvedRequiredCapabilities(): Set<RequiredCapability> {
         return unresolvedRequiredCapabilities
+    }
+
+    /**
+     * Return the resolved wired capabilities, if any, for this exception.
+     *
+     * @return A collection of the resolved wired capabilities for this exception.
+     * The returned collection may be empty if no wired capabilities are available.
+     */
+    fun getResolvedWireCapabilities(): Set<Wire<AgentResource>> {
+        return resolvedWiredCapabilities
     }
 }

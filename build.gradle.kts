@@ -206,6 +206,10 @@ dependencies {
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation(kotlin("stdlib-jdk8"))
+
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:k3s:1.20.4")
+    testImplementation("org.bouncycastle:bcpkix-jdk15on:1.70")
 }
 
 tasks.withType<Test> {
