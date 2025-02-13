@@ -10,6 +10,7 @@ import io.fabric8.kubernetes.client.KubernetesClient
 import org.eclipse.lmos.operator.resources.ChannelResource
 import org.eclipse.lmos.operator.resources.ChannelRoutingResource
 import org.eclipse.lmos.operator.server.routing.CustomResourcesService
+import org.eclipse.lmos.operator.util.SubsetProvider
 import org.springframework.stereotype.Component
 import java.util.function.Consumer
 
@@ -25,8 +26,8 @@ class DefaultCustomResourcesService(private val client: KubernetesClient) : Cust
             mapOf(
                 "tenant" to tenant,
                 "channel" to channel,
-                "subset" to subset,
             )
+        labelSelectors.plus("subset" to SubsetProvider.getSubset(subset))
 
         val channelRoutingResources =
             client
@@ -52,8 +53,8 @@ class DefaultCustomResourcesService(private val client: KubernetesClient) : Cust
         val labelSelectors =
             mapOf(
                 "tenant" to tenant,
-                "subset" to subset,
             )
+        labelSelectors.plus("subset" to SubsetProvider.getSubset(subset))
 
         val channelResources =
             client.resources(
@@ -77,8 +78,8 @@ class DefaultCustomResourcesService(private val client: KubernetesClient) : Cust
             mapOf(
                 "tenant" to tenant,
                 "channel" to channel,
-                "subset" to subset,
             )
+        labelSelectors.plus("subset" to SubsetProvider.getSubset(subset))
 
         val channelResources =
             client.resources(

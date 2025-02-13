@@ -15,6 +15,7 @@ import org.eclipse.lmos.operator.resources.ChannelRoutingCapability
 import org.eclipse.lmos.operator.resources.ChannelRoutingResource
 import org.eclipse.lmos.operator.resources.ChannelRoutingSpec
 import org.eclipse.lmos.operator.resources.Labels
+import org.eclipse.lmos.operator.util.SubsetProvider
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -49,7 +50,7 @@ fun createChannelRoutingResource(channelResource: ChannelResource): ChannelRouti
     val metadata = channelResource.metadata
     val channelResourceName = metadata.name
     val labels = metadata.labels
-    LOG.debug("Channel labels:{}", labels)
+    LOG.info("Channel:{}, Channel labels:{}", channelResource.metadata.name, labels)
     val channel = labels[Labels.CHANNEL]
     val tenant = labels[Labels.TENANT]
     val version = labels[Labels.VERSION]
@@ -63,7 +64,7 @@ fun createChannelRoutingResource(channelResource: ChannelResource): ChannelRouti
             Labels.CHANNEL to channel,
             Labels.TENANT to tenant,
             Labels.VERSION to version,
-            Labels.SUBSET to subset,
+            Labels.SUBSET to SubsetProvider.getSubset(subset),
         )
     channelRoutingResource.metadata = channelRoutingResourceMetadata
     channelRoutingResource.spec = ChannelRoutingSpec()
