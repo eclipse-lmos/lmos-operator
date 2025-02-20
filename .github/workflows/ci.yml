@@ -12,6 +12,8 @@ on:
 jobs:
   CI:
     uses: eclipse-lmos/.github/.github/workflows/ci.yml@pipeline
+#    with:
+#      git-ref: github.ref
     secrets:
       oss-username: ${{ secrets.OSSRH_USERNAME }}
       oss-password: ${{ secrets.OSSRH_PASSWORD }}
