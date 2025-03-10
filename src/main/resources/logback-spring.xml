@@ -25,12 +25,4 @@
             <appender-ref ref="CONSOLE"/>
         </root>
     </springProfile>
-    <springProfile name="sentry">
-        <appender name="Sentry" class="io.sentry.logback.SentryAppender">
-            <minimumEventLevel>WARN</minimumEventLevel>
-        </appender>
-        <root level="WARN">
-            <appender-ref ref="Sentry"/>
-        </root>
-    </springProfile>
 </configuration>
