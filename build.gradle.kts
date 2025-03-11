@@ -13,7 +13,7 @@ plugins {
     id("org.springframework.boot") version "3.4.0"
     id("org.jetbrains.kotlin.plugin.spring") version "2.1.0"
     id("org.jlleitschuh.gradle.ktlint") version "12.2.0"
-    id("io.spring.dependency-management") version "1.1.6"
+    id("io.spring.dependency-management") version "1.1.7"
     id("org.cadixdev.licenser") version "0.6.1"
 
     id("com.citi.helm") version "2.2.0"
