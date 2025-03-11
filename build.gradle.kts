@@ -19,7 +19,7 @@ plugins {
     id("com.citi.helm") version "2.2.0"
     id("com.citi.helm-publish") version "2.2.0"
     id("net.researchgate.release") version "3.0.2"
-    id("com.vanniktech.maven.publish") version "0.30.0"
+    id("com.vanniktech.maven.publish") version "0.31.0"
     kotlin("jvm")
     kotlin("kapt") version "2.0.21"
 }
