@@ -189,7 +189,7 @@ dependencies {
     implementation("io.javaoperatorsdk:operator-framework-spring-boot-starter:5.6.0")
     implementation("io.fabric8:generator-annotations:6.13.4")
 
-    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
+    implementation("net.logstash.logback:logstash-logback-encoder:8.0")
 
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin")
 
