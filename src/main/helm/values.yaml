@@ -135,3 +135,5 @@ customResources:
 # The namespaces from where clients are calling the lmos operator
 clientNamespaces:
   - default
+
+canaryReleaseEnabled: true
