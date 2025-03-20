@@ -21,7 +21,7 @@ plugins {
     id("net.researchgate.release") version "3.1.0"
     id("com.vanniktech.maven.publish") version "0.31.0"
     kotlin("jvm")
-    kotlin("kapt") version "2.1.10"
+    kotlin("kapt") version "2.1.20"
 }
 
 group = "org.eclipse.lmos"
