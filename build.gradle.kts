@@ -188,7 +188,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     implementation("io.javaoperatorsdk:operator-framework-spring-boot-starter:5.6.0")
-    implementation("io.fabric8:generator-annotations:7.1.0")
+    implementation("io.fabric8:generator-annotations:7.3.1")
 
     implementation("net.logstash.logback:logstash-logback-encoder:8.0")
 
@@ -200,7 +200,7 @@ dependencies {
         exclude(group = "org.apache.logging.log4j", module = "log4j-slf4j2-impl")
     }
 
-    implementation("io.fabric8", "generator-annotations", "7.1.0")
+    implementation("io.fabric8", "generator-annotations", "7.3.1")
     kapt("io.fabric8", "crd-generator-apt", "6.13.4")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
