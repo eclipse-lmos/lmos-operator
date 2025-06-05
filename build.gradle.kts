@@ -187,7 +187,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
-    implementation("io.javaoperatorsdk:operator-framework-spring-boot-starter:5.6.0")
+    implementation("io.javaoperatorsdk:operator-framework-spring-boot-starter:6.1.0")
     implementation("io.fabric8:generator-annotations:7.3.1")
 
     implementation("net.logstash.logback:logstash-logback-encoder:8.0")
@@ -196,7 +196,7 @@ dependencies {
 
     implementation("org.semver4j:semver4j:5.6.0")
 
-    testImplementation("io.javaoperatorsdk:operator-framework-spring-boot-starter-test:5.6.0") {
+    testImplementation("io.javaoperatorsdk:operator-framework-spring-boot-starter-test:6.1.0") {
         exclude(group = "org.apache.logging.log4j", module = "log4j-slf4j2-impl")
     }
 
