@@ -1,3 +1,4 @@
+{{- if .Values.canaryReleaseEnabled }}
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
@@ -33,3 +34,4 @@ spec:
                 x-namespace: {{ $namespace | quote }}
                 x-subset: "canary"
     {{- end }}
+{{- end }}

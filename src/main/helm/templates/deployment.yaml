@@ -43,6 +43,8 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: "logformat-json"
           {{- end }}
+            - name: LMOS_OPERATOR_CANARY_RELEASE_ENABLED
+              value: "{{ .Values.canaryReleaseEnabled }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
