@@ -225,6 +225,6 @@ tasks.withType<JavaCompile> {
 
 kapt {
     arguments {
-        arg("crd.output.dir", file("src/main/resources/META-INF/fabric8"))
+        arg("crd.output.dir", "src/main/resources/META-INF/fabric8")
     }
 }
