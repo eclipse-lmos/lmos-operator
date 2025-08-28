@@ -22,6 +22,21 @@ javaoperatorsdk:
   crd:
     apply-on-startup: true
 
+lmos:
+  router:
+    embedding:
+      enabled: false
+      store:
+        host: localhost
+        port: 6334
+        tlsEnabled: false
+        apiKey:  dummy-key
+      model:
+        provider: openai # Options: openai, huggingface
+        api-key: dummy-key
+        base-url: https://api.openai.com/v1/embeddings # Only required for provider openai
+        model-name: intfloat/multilingual-e5-large # Only required for provider huggingface
+
 logging:
   level:
     root: INFO
@@ -37,6 +52,8 @@ logging:
         lmos:
           operator:
             OperatorApplicationKt: WARN
+    sun:
+      rmi: ERROR
 
 management:
   server:

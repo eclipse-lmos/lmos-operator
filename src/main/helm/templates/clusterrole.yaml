@@ -16,4 +16,19 @@ rules:
       {{- range .Values.customResources }}
       - "{{ . }}"
       {{- end }}
-    verbs: [ "get", "list", "create", "update", "delete", "watch", "patch" ]
+    verbs: ["get", "list", "create", "update", "delete", "watch", "patch"]
+
+  # Add permission to access deployments in the apps API group
+  - apiGroups: [ "apps" ]
+    resources: [ "deployments" ]
+    verbs: ["get", "list", "watch", "update", "patch"]
+
+  # Add permission to access pods
+  - apiGroups: [ "" ]
+    resources: [ "pods" ]
+    verbs: [ "get", "list", "watch" ]
+
+  # Add permission to access services
+  - apiGroups: [ "" ]
+    resources: [ "services" ]
+    verbs: [ "get", "list", "watch" ]

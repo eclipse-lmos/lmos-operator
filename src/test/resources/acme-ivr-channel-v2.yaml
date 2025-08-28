@@ -15,9 +15,11 @@ metadata:
     subset: canary
 spec:
   requiredCapabilities:
-    - name: view-bill
+    - id: view-bill-id
+      name: view-bill
       version: "1.1.0"
-    - name: download-bill
+    - id: download-bill-id
+      name: download-bill
       version: ">=1.1.0"
     - name: view-contract
       version: ">=1.1.0"

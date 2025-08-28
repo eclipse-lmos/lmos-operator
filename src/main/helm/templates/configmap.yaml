@@ -1,0 +1,39 @@
+{{- if eq .Values.embeddingEnabled true }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "lmos-operator.fullname" . }}
+  labels:
+      {{- include "lmos-operator.labels" . | nindent 4 }}
+data:
+  LMOS_ROUTER_EMBEDDING_ENABLED: {{ .Values.embeddingEnabled | quote -}}
+
+  {{/* ---------- Embedding Model Configuration ---------- */ -}}
+
+  {{- if .Values.embeddingModelProvider }}
+  LMOS_ROUTER_EMBEDDING_MODEL_PROVIDER: {{ .Values.embeddingModelProvider | quote }}
+  {{- end -}}
+
+  {{- if .Values.embeddingModelOpenAiUrl }}
+  LMOS_ROUTER_EMBEDDING_MODEL_BASE_URL: {{ .Values.embeddingModelOpenAiUrl | quote }}
+  {{- end -}}
+
+  {{- if .Values.embeddingModelHuggingfaceModelName }}
+  LMOS_ROUTER_EMBEDDING_MODEL_NAME: {{ .Values.embeddingModelHuggingfaceModelName | quote }}
+  {{- end -}}
+
+  {{/* ---------- Embedding Store Configuration ---------- */}}
+
+  {{- if .Values.embeddingStoreHost }}
+  LMOS_ROUTER_EMBEDDING_STORE_HOST: {{ .Values.embeddingStoreHost | quote }}
+  {{- end -}}
+
+  {{- if .Values.embeddingStorePort }}
+  LMOS_ROUTER_EMBEDDING_STORE_PORT: {{ .Values.embeddingStorePort | quote }}
+  {{- end -}}
+
+  {{- if .Values.embeddingStoreTlsEnabled }}
+  LMOS_ROUTER_EMBEDDING_STORE_TLSENABLED: {{ .Values.embeddingStoreTlsEnabled | quote }}
+  {{- end -}}
+
+ {{- end }}

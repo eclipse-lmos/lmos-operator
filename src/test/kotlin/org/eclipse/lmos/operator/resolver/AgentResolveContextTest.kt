@@ -22,7 +22,7 @@ class AgentResolveContextTest {
         val agentResolveContext = AgentResolveContext(listOf(agentResource))
         val wiredCapabilities =
             agentResolveContext.findCapabilityProviders(
-                RequiredCapability("Capability1", "1.0.0"),
+                RequiredCapability("Capability1Id", "Capability1", "1.0.0"),
             )
 
         // Then
@@ -39,7 +39,7 @@ class AgentResolveContextTest {
         val agentResolveContext = AgentResolveContext(listOf(agentResource))
         val wiredCapabilities =
             agentResolveContext.findCapabilityProviders(
-                RequiredCapability("Capability1", ">=1.0.0"),
+                RequiredCapability("Capability1Id", "Capability1", ">=1.0.0"),
             )
 
         // Then
@@ -56,7 +56,7 @@ class AgentResolveContextTest {
         val agentResolveContext = AgentResolveContext(listOf(agentResource))
         val wiredCapabilities =
             agentResolveContext.findCapabilityProviders(
-                RequiredCapability("Capability1", "1.1.0"),
+                RequiredCapability("Capability1Id", "Capability1", "1.1.0"),
             )
 
         // Then
@@ -74,7 +74,7 @@ class AgentResolveContextTest {
         val agentResolveContext = AgentResolveContext(listOf(agentResource1, agentResource2, agentResource3))
         val wiredCapabilities =
             agentResolveContext.findCapabilityProviders(
-                RequiredCapability("Capability1", ">=1.1.0"),
+                RequiredCapability("Capability1Id", "Capability1", ">=1.1.0"),
             )
 
         // Then
@@ -92,7 +92,7 @@ class AgentResolveContextTest {
         val agentResolveContext = AgentResolveContext(listOf(agentResource1, agentResource2))
         val wiredCapabilities =
             agentResolveContext.findCapabilityProviders(
-                RequiredCapability("Capability1", "1.1.0"),
+                RequiredCapability("Capability1Id", "Capability1", "1.1.0"),
             )
 
         // Then
@@ -109,7 +109,7 @@ class AgentResolveContextTest {
         val agentResolveContext = AgentResolveContext(listOf(agentResource))
         val wiredCapabilities =
             agentResolveContext.findCapabilityProviders(
-                RequiredCapability("Nonexistent Capability", "1.0.0"),
+                RequiredCapability("Capability1Id", "Nonexistent Capability", "1.0.0"),
             )
 
         // Then
@@ -125,11 +125,11 @@ class AgentResolveContextTest {
         val agentResolveContext = AgentResolveContext(listOf(agentResource))
         val wiredCapabilities1 =
             agentResolveContext.findCapabilityProviders(
-                RequiredCapability("Capability1", "1.0.0"),
+                RequiredCapability("Capability1Id", "Capability1", "1.0.0"),
             )
         val wiredCapabilities2 =
             agentResolveContext.findCapabilityProviders(
-                RequiredCapability("Capability2", "2.0.0"),
+                RequiredCapability("CapabilityId2", "Capability2", "2.0.0"),
             )
 
         // Then

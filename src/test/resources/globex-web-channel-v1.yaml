@@ -15,5 +15,6 @@ metadata:
     subset: stable
 spec:
   requiredCapabilities:
-    - name: view-bill
+    - id: view-bill-id
+      name: view-bill
       version: "1.0.0"

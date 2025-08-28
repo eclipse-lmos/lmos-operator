@@ -18,9 +18,33 @@ spec:
     - web
     - ivr
   providedCapabilities:
-    - name: view-contract
+    - id: view-contract-id
+      name: view-contract
       version: 1.1.0
       description: Capability to view a contract
-    - name: cancel-contract
+      examples:
+        - show my contract
+        - view my contract details
+        - I want to see my contract
+        - display my current contract
+        - open my contract information
+        - what are the terms of my contract?
+        - show contract start and end dates
+        - summarize my contract
+        - view my contract obligations
+        - how long is my contract valid?
+    - id: cancel-contract-id
+      name: cancel-contract
       version: 1.1.0
       description: Capability to cancel a contract
+      examples:
+        - I want to cancel my contract
+        - terminate my contract
+        - end my contract immediately
+        - stop my contract subscription
+        - cancel the agreement
+        - discontinue my contract
+        - I no longer want this contract
+        - how do I cancel my contract?
+        - revoke my contract
+        - request contract cancellation

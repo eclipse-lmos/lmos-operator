@@ -20,24 +20,24 @@ class CapabilityResolverTest {
 
         val bestMatchingWire =
             Wire(
-                RequiredCapability("capability1", "1.0.0"),
-                ProvidedCapability("capability1", "1.3.0", "description"),
+                RequiredCapability("capability1Id", "capability1", "1.0.0"),
+                ProvidedCapability("capability1Id", "capability1", "1.3.0", "description"),
                 AgentResource(),
             )
 
         // Add test data to the wires set
         wires.add(
             Wire(
-                RequiredCapability("capability1", ">=1.0.0"),
-                ProvidedCapability("capability1", "1.2.0", "description"),
+                RequiredCapability("capability1Id", "capability1", ">=1.0.0"),
+                ProvidedCapability("capability1Id", "capability1", "1.2.0", "description"),
                 AgentResource(),
             ),
         )
         wires.add(bestMatchingWire)
         wires.add(
             Wire(
-                RequiredCapability("capability1", ">=1.0.0"),
-                ProvidedCapability("capability1", "1.1.0", "description"),
+                RequiredCapability("capability1Id", "capability1", ">=1.0.0"),
+                ProvidedCapability("capability1Id", "capability1", "1.1.0", "description"),
                 AgentResource(),
             ),
         )
@@ -53,24 +53,24 @@ class CapabilityResolverTest {
 
         val bestMatchingWire =
             Wire(
-                RequiredCapability("capability1", "1.0.0"),
-                ProvidedCapability("capability1", "1.0.1", "description"),
+                RequiredCapability("capability1Id", "capability1", "1.0.0"),
+                ProvidedCapability("capability1Id", "capability1", "1.0.1", "description"),
                 AgentResource(),
             )
 
         // Add test data to the wires set
         wires.add(
             Wire(
-                RequiredCapability("capability1", ">=1.0.0"),
-                ProvidedCapability("capability1", "1.2.0", "description"),
+                RequiredCapability("capability1Id", "capability1", ">=1.0.0"),
+                ProvidedCapability("capability1Id", "capability1", "1.2.0", "description"),
                 AgentResource(),
             ),
         )
         wires.add(bestMatchingWire)
         wires.add(
             Wire(
-                RequiredCapability("capability1", ">=1.0.0"),
-                ProvidedCapability("capability1", "1.1.0", "description"),
+                RequiredCapability("capability1Id", "capability1", ">=1.0.0"),
+                ProvidedCapability("capability1Id", "capability1", "1.1.0", "description"),
                 AgentResource(),
             ),
         )

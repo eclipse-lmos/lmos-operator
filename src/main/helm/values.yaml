@@ -135,3 +135,14 @@ customResources:
 # The namespaces from where clients are calling the lmos operator
 clientNamespaces:
   - default
+
+embeddingEnabled: false
+embeddingModelProvider: "openai"
+embeddingStoreHost: "localhost"
+embeddingStorePort: 6334
+embeddingStoreTlsEnabled: false
+
+# Set to true if the secret containing the LLM API key should be created by helm.
+# If set to false, a secret named <secretName> must be available in the cluster.
+# If set to true, a secret named <secretName> will be created.
+createSecret: false

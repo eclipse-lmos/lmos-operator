@@ -32,6 +32,7 @@ object RoutingChannelGenerator {
         groupedWires.forEach { (agent: AgentResource, wires: Set<Wire<AgentResource>>) ->
             val capabilityGroup =
                 CapabilityGroup(
+                    id = agent.spec.id,
                     name = agent.metadata.name,
                     capabilities = wires.map { ChannelRoutingCapability(it) }.toSet(),
                     description = agent.spec.description,

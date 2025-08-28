@@ -32,24 +32,29 @@ class AgentResource :
     Namespaced
 
 data class AgentSpec(
+    var id: String = "",
+    var description: String = "",
     var supportedTenants: Set<String> = emptySet(),
     var supportedChannels: Set<String> = emptySet(),
     var providedCapabilities: Set<ProvidedCapability> = emptySet(),
-    var description: String = "",
 )
 
 sealed class Capability {
+    abstract var id: String
     abstract var name: String
     abstract var version: String
 }
 
 data class ProvidedCapability(
+    @JsonPropertyDescription("The id of the capability")
+    override var id: String = "",
     @JsonPropertyDescription("The name of the capability")
     @Required
     override var name: String,
     @Required
     override var version: String,
     var description: String = "",
+    var examples: List<String> = emptyList(),
 ) : Capability()
 
 @Group("lmos.eclipse")
@@ -68,6 +73,8 @@ enum class ResolveStatus {
 }
 
 data class RequiredCapability(
+    @JsonPropertyDescription("The id of the capability")
+    override var id: String = "",
     @JsonPropertyDescription("The name of the capability")
     @Required
     override var name: String,
@@ -142,6 +149,7 @@ data class ChannelRoutingStatus(
 )
 
 data class CapabilityGroup(
+    var id: String = "",
     @Required
     var name: String,
     @Required
@@ -150,6 +158,7 @@ data class CapabilityGroup(
 )
 
 data class ChannelRoutingCapability(
+    var id: String = "",
     @Required
     var name: String,
     @Required
@@ -161,6 +170,7 @@ data class ChannelRoutingCapability(
     var description: String = "",
 ) {
     constructor(wire: Wire<AgentResource>) : this(
+        id = wire.providedCapability.id,
         name = wire.providedCapability.name,
         requiredVersion = wire.requiredCapability.version,
         providedVersion = wire.providedCapability.version,

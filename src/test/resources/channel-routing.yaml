@@ -25,15 +25,18 @@ metadata:
   uid: "00000000-0000-0000-0000-000000000062"
 spec:
   capabilityGroups:
-    - name: "billing-agent"
+    - id: "billing-agent-id"
+      name: "billing-agent"
       description: "This is the billing agent description"
       capabilities:
-        - name: "view-bill"
+        - id: "view-bill-id"
+          name: "view-bill"
           requiredVersion: "1.0.0"
           providedVersion: "1.0.0"
           description: "Capability to view a bill"
           host: "billing-agent-stable.svc.cluster.local"
-        - name: "download-bill"
+        - id: "download-bill-id"
+          name: "download-bill"
           requiredVersion: ">=1.0.0"
           providedVersion: "1.1.0"
           description: "Capability to download a bill"

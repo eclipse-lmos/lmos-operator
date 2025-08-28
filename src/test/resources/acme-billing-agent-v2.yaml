@@ -11,6 +11,7 @@ metadata:
   labels:
     version: "1.1.0"
 spec:
+  id: billing-agent-stable-id
   description: This is the billing agent description
   supportedTenants:
     - acme
@@ -18,9 +19,32 @@ spec:
     - web
     - ivr
   providedCapabilities:
-    - name: view-bill
+    - id: view-bill-id
+      name: view-bill
       version: 1.0.0
       description: Capability to view a bill
-    - name: download-bill
+      examples:
+        - show my bill
+        - view my invoice
+        - how much do I owe?
+        - billing details
+        - show me my outstanding balance
+        - download my latest invoice
+        - show billing summary
+        - how much was my last bill?
+        - where can I see my payment history?
+    - id: download-bill-id
+      name: download-bill
       version: 1.2.0
       description: Capability to download a bill
+      examples:
+        - download my latest bill
+        - get a PDF of my invoice
+        - send me my bill as a file
+        - I want to download my invoice
+        - email me my invoice
+        - export my billing statement
+        - how can I download my last bill?
+        - save invoice to my device
+        - give me a copy of my bill
+        - I need a downloadable invoice

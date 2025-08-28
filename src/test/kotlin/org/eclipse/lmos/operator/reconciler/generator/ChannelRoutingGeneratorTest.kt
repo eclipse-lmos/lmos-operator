@@ -32,18 +32,18 @@ class ChannelRoutingGeneratorTest {
         wiredCapabilities =
             setOf(
                 Wire(
-                    requiredCapability = RequiredCapability("capability1", "1.0.0"),
-                    providedCapability = ProvidedCapability("capability1", "1.0.0", "bla"),
+                    requiredCapability = RequiredCapability("capability1Id", "capability1", "1.0.0"),
+                    providedCapability = ProvidedCapability("capability1Id", "capability1", "1.0.0", "bla"),
                     provider = agent1,
                 ),
                 Wire(
-                    requiredCapability = RequiredCapability("capability2", "1.0.0"),
-                    providedCapability = ProvidedCapability("capability2", "1.0.0", "bla"),
+                    requiredCapability = RequiredCapability("capability2Id", "capability2", "1.0.0"),
+                    providedCapability = ProvidedCapability("capability2Id", "capability2", "1.0.0", "bla"),
                     provider = agent1,
                 ),
                 Wire(
-                    requiredCapability = RequiredCapability("capability3", "1.0.0"),
-                    providedCapability = ProvidedCapability("capability3", "1.0.0", "bla"),
+                    requiredCapability = RequiredCapability("capability3Id", "capability3", "1.0.0"),
+                    providedCapability = ProvidedCapability("capability3Id", "capability3", "1.0.0", "bla"),
                     provider = agent2,
                 ),
             )
