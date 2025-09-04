@@ -17,6 +17,7 @@ import org.eclipse.lmos.classifier.core.Agent
 import org.eclipse.lmos.classifier.core.Capability
 import org.eclipse.lmos.classifier.core.SystemContext
 import org.eclipse.lmos.classifier.core.semantic.EmbeddingHandler
+import org.eclipse.lmos.operator.reconciler.generator.DEPLOYMENT_LABEL_KEY_SUBSET
 import org.eclipse.lmos.operator.resources.AgentResource
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -85,55 +86,48 @@ class AgentEmbeddingReconciler(
     }
 
     private fun AgentResource.convertToContextAgentMap(): Map<SystemContext, Agent> {
-        val capabilities =
-            this.spec.providedCapabilities.mapNotNull {
-                val examples = it.examples.filter(String::isNotEmpty)
-                if (it.description.isNotEmpty() && examples.isNotEmpty()) {
-                    Capability(it.id.ifBlank { it.name }, it.description, examples)
-                } else {
-                    log.warn(
-                        "Skip embedding handling for capability '${it.name}' from agent '${this.metadata.name}', " +
-                            "because the capability has no description or examples.",
-                    )
-                    null
-                }
-            }
+        val capabilities = createCapabilities()
+        if (capabilities.isEmpty()) {
+            log.warn("Skip embedding handling for agent '${metadata.name}', because the agent has no valid capabilities.")
+            return emptyMap()
+        }
 
-        return if (capabilities.isEmpty()) {
-            log.warn(
-                "Skip embedding handling for agent '${this.metadata.name}', " +
-                    "because the agent has no capabilities.",
+        val systemContexts = createSystemContexts()
+        if (systemContexts.isEmpty()) {
+            log.warn("Skip embedding handling for agent '${metadata.name}', because the agent has no supported tenants or channels.")
+            return emptyMap()
+        }
+
+        return systemContexts.associateWith {
+            Agent(
+                id = spec.id.ifBlank { metadata.name },
+                name = metadata.name,
+                address = "${metadata.name}.${metadata.namespace}.svc.cluster.local",
+                capabilities = capabilities,
             )
-            emptyMap()
-        } else {
-            val systemContext = generateSystemContexts(this.spec.supportedTenants, spec.supportedChannels)
-            if (systemContext.isEmpty()) {
-                log.warn(
-                    "Skip embedding handling for agent '${this.metadata.name}', " +
-                        "because the agent has no supported tenants or channels.",
-                )
-                emptyMap()
-            } else {
-                systemContext
-                    .associateWith {
-                        Agent(
-                            id = this.spec.id.ifBlank { this.metadata.name },
-                            name = this.metadata.name,
-                            address = "${this.metadata.name}.${this.metadata.namespace}.svc.cluster.local",
-                            capabilities = capabilities,
-                        )
-                    }
-            }
         }
     }
 
-    fun generateSystemContexts(
-        tenants: Set<String>,
-        channels: Set<String>,
-    ): List<SystemContext> =
-        tenants.flatMap { tenant ->
-            channels.map { channel ->
-                SystemContext(tenant, channel)
+    private fun AgentResource.createCapabilities(): List<Capability> =
+        spec.providedCapabilities.mapNotNull { cap ->
+            val examples = cap.examples.filter(String::isNotEmpty)
+            if (cap.description.isNotEmpty() && examples.isNotEmpty()) {
+                Capability(cap.id.ifBlank { cap.name }, cap.description, examples)
+            } else {
+                log.warn(
+                    "Skip embedding handling for capability '${cap.name}' from agent '${metadata.name}', " +
+                        "because the capability has no description or examples.",
+                )
+                null
             }
         }
+
+    fun AgentResource.createSystemContexts(): List<SystemContext> {
+        val subset = metadata.labels[DEPLOYMENT_LABEL_KEY_SUBSET] ?: "stable"
+        return spec.supportedTenants.flatMap { tenant ->
+            spec.supportedChannels.map { channel ->
+                SystemContext(tenant, channel, subset)
+            }
+        }
+    }
 }

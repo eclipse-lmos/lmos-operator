@@ -92,7 +92,7 @@ class AgentEmbeddingReconcilerTest {
         verify(exactly = 1) {
             // calling with system context myTenant/myChannel
             embeddingHandler.ingest(
-                match<SystemContext> { it.tenantId == "myTenant" && it.channelId == "myChannel" },
+                match<SystemContext> { it.tenantId == "myTenant" && it.channelId == "myChannel" && it.subset == "stable" },
                 match<Agent> { agent ->
                     agent.id == "ordering-agent-id" &&
                         agent.capabilities.any {
@@ -107,7 +107,7 @@ class AgentEmbeddingReconcilerTest {
         verify {
             // calling with system context myTenant/anotherChannel
             embeddingHandler.ingest(
-                match<SystemContext> { it.tenantId == "myTenant" && it.channelId == "anotherChannel" },
+                match<SystemContext> { it.tenantId == "myTenant" && it.channelId == "anotherChannel" && it.subset == "stable" },
                 match<Agent> { agent ->
                     agent.id == "ordering-agent-id" &&
                         agent.capabilities.any {
@@ -133,7 +133,7 @@ class AgentEmbeddingReconcilerTest {
 
         verify(exactly = 0) {
             embeddingHandler.ingest(
-                match<SystemContext> { it.tenantId == "myTenant" && it.channelId == "myChannel" },
+                match<SystemContext> { it.tenantId == "myTenant" && it.channelId == "myChannel" && it.subset == "stable" },
                 match<Agent> { it.id == "ordering-agent-id" },
             )
         }
@@ -151,7 +151,7 @@ class AgentEmbeddingReconcilerTest {
         assertThat(result).isNotNull
         verify {
             embeddingHandler.remove(
-                match<SystemContext> { it.tenantId == "myTenant" && it.channelId == "myChannel" },
+                match<SystemContext> { it.tenantId == "myTenant" && it.channelId == "myChannel" && it.subset == "stable" },
                 match<Agent> { it.id == "ordering-agent-id" },
             )
         }

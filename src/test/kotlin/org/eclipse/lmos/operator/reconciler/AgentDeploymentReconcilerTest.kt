@@ -29,7 +29,7 @@ class AgentDeploymentReconcilerTest {
 
     private val capabilities =
         AgentSpecification(
-            id = "ordering-agent-id",
+            id = "ordering-agent",
             description = "Ordering agent description",
             supportedTenants = setOf("myTenant"),
             supportedChannels = setOf("myChannel"),
@@ -66,7 +66,7 @@ class AgentDeploymentReconcilerTest {
         verify {
             kubernetesResourceManager.createAgentResource(
                 match<AgentResource> { resource ->
-                    resource.spec.id == "ordering-agent-id" &&
+                    resource.spec.id == "ordering-agent" &&
                         resource.spec.description == "Ordering agent description" &&
                         resource.spec.supportedTenants.containsAll(listOf("myTenant")) &&
                         resource.spec.supportedChannels.containsAll(listOf("myChannel")) &&

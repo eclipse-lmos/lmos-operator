@@ -13,21 +13,26 @@ import org.eclipse.lmos.operator.resources.AgentResource
 import org.eclipse.lmos.operator.resources.AgentSpec
 import org.eclipse.lmos.operator.resources.ProvidedCapability
 
+const val DEPLOYMENT_LABEL_KEY_AGENT = "lmos-agent"
+const val DEPLOYMENT_LABEL_KEY_SUBSET = "subset"
+
 object AgentGenerator {
     fun createAgentResource(
         deployment: Deployment,
         agentSpecification: AgentSpecification,
     ): AgentResource {
+        val subset = deployment.metadata.labels[DEPLOYMENT_LABEL_KEY_SUBSET] ?: "stable"
         val agentMetadata =
             ObjectMetaBuilder()
                 .withName(deployment.metadata.name)
                 .withNamespace(deployment.metadata.namespace)
-                .addToLabels("lmos-agent", "true")
+                .addToLabels(DEPLOYMENT_LABEL_KEY_AGENT, "true")
+                .addToLabels(DEPLOYMENT_LABEL_KEY_SUBSET, subset)
                 .build()
 
         val agentSpec =
             AgentSpec(
-                id = agentSpecification.id,
+                id = deployment.metadata.name,
                 description = agentSpecification.description,
                 supportedTenants = agentSpecification.supportedTenants,
                 supportedChannels = agentSpecification.supportedChannels,
