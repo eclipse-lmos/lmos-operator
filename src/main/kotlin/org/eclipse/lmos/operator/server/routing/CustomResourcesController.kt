@@ -28,14 +28,14 @@ class CustomResourcesController(
 ) {
     @GetMapping("/channels")
     fun getChannels(
-        @RequestHeader(name = X_SUBSET_HEADER) subsetHeader: String,
+        @RequestHeader(name = X_SUBSET_HEADER) subsetHeader: String = "stable",
         @RequestHeader(name = X_NAMESPACE_HEADER, required = false) namespaceHeader: String = KUBERNETES_DEFAULT_NAMESPACE,
         @PathVariable tenant: String,
     ) = customResourcesService.getChannels(tenant, subsetHeader, namespaceHeader)
 
     @GetMapping("/channels/{channel}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getChannel(
-        @RequestHeader(name = X_SUBSET_HEADER) subsetHeader: String,
+        @RequestHeader(name = X_SUBSET_HEADER) subsetHeader: String = "stable",
         @RequestHeader(name = X_NAMESPACE_HEADER, required = false) namespaceHeader: String = KUBERNETES_DEFAULT_NAMESPACE,
         @PathVariable tenant: String,
         @PathVariable channel: String,
@@ -46,7 +46,7 @@ class CustomResourcesController(
 
     @GetMapping("/channels/{channel}/routing", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getRouting(
-        @RequestHeader(name = X_SUBSET_HEADER) subsetHeader: String,
+        @RequestHeader(name = X_SUBSET_HEADER) subsetHeader: String = "stable",
         @RequestHeader(name = X_NAMESPACE_HEADER, required = false) namespaceHeader: String = KUBERNETES_DEFAULT_NAMESPACE,
         @PathVariable tenant: String,
         @PathVariable channel: String,

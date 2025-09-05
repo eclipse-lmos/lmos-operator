@@ -8,20 +8,21 @@ package org.eclipse.lmos.operator.reconciler.generator
 
 import io.fabric8.kubernetes.api.model.ObjectMetaBuilder
 import io.fabric8.kubernetes.api.model.apps.Deployment
+import org.eclipse.lmos.operator.DEPLOYMENT_LABEL_KEY_SUBSET
+import org.eclipse.lmos.operator.DEPLOYMENT_SUBSET_DEFAULT_VALUE
 import org.eclipse.lmos.operator.reconciler.AgentSpecification
 import org.eclipse.lmos.operator.resources.AgentResource
 import org.eclipse.lmos.operator.resources.AgentSpec
 import org.eclipse.lmos.operator.resources.ProvidedCapability
 
 const val DEPLOYMENT_LABEL_KEY_AGENT = "lmos-agent"
-const val DEPLOYMENT_LABEL_KEY_SUBSET = "subset"
 
 object AgentGenerator {
     fun createAgentResource(
         deployment: Deployment,
         agentSpecification: AgentSpecification,
     ): AgentResource {
-        val subset = deployment.metadata.labels[DEPLOYMENT_LABEL_KEY_SUBSET] ?: "stable"
+        val subset = deployment.metadata.labels[DEPLOYMENT_LABEL_KEY_SUBSET] ?: DEPLOYMENT_SUBSET_DEFAULT_VALUE
         val agentMetadata =
             ObjectMetaBuilder()
                 .withName(deployment.metadata.name)

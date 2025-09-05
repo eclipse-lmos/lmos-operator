@@ -17,7 +17,8 @@ import org.eclipse.lmos.classifier.core.Agent
 import org.eclipse.lmos.classifier.core.Capability
 import org.eclipse.lmos.classifier.core.SystemContext
 import org.eclipse.lmos.classifier.core.semantic.EmbeddingHandler
-import org.eclipse.lmos.operator.reconciler.generator.DEPLOYMENT_LABEL_KEY_SUBSET
+import org.eclipse.lmos.operator.DEPLOYMENT_LABEL_KEY_SUBSET
+import org.eclipse.lmos.operator.DEPLOYMENT_SUBSET_DEFAULT_VALUE
 import org.eclipse.lmos.operator.resources.AgentResource
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -123,7 +124,7 @@ class AgentEmbeddingReconciler(
         }
 
     fun AgentResource.createSystemContexts(): List<SystemContext> {
-        val subset = metadata.labels[DEPLOYMENT_LABEL_KEY_SUBSET] ?: "stable"
+        val subset = metadata.labels[DEPLOYMENT_LABEL_KEY_SUBSET] ?: DEPLOYMENT_SUBSET_DEFAULT_VALUE
         return spec.supportedTenants.flatMap { tenant ->
             spec.supportedChannels.map { channel ->
                 SystemContext(tenant, channel, subset)
