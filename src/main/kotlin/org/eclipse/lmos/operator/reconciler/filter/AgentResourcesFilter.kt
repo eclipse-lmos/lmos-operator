@@ -22,7 +22,6 @@ class AgentResourcesFilter(
     }
 
     override fun test(agentResource: AgentResource): Boolean {
-
         val channelSubset = labels[DEPLOYMENT_LABEL_KEY_SUBSET] ?: "stable"
         val agentSubset = agentResource.metadata.labels[DEPLOYMENT_LABEL_KEY_SUBSET] ?: "stable"
         if (channelSubset != agentSubset) {
