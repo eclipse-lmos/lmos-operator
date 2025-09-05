@@ -6,8 +6,8 @@
 
 package org.eclipse.lmos.operator.reconciler.filter
 
-import org.eclipse.lmos.operator.DEPLOYMENT_SUBSET_LABEL_KEY
 import org.eclipse.lmos.operator.DEPLOYMENT_SUBSET_LABEL_DEFAULT_VALUE
+import org.eclipse.lmos.operator.DEPLOYMENT_SUBSET_LABEL_KEY
 import org.eclipse.lmos.operator.resources.AgentResource
 import org.eclipse.lmos.operator.resources.ChannelResource
 import java.util.function.Predicate

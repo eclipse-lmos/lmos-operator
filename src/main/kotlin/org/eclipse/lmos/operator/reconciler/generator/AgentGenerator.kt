@@ -8,8 +8,8 @@ package org.eclipse.lmos.operator.reconciler.generator
 
 import io.fabric8.kubernetes.api.model.ObjectMetaBuilder
 import io.fabric8.kubernetes.api.model.apps.Deployment
-import org.eclipse.lmos.operator.DEPLOYMENT_SUBSET_LABEL_KEY
 import org.eclipse.lmos.operator.DEPLOYMENT_SUBSET_LABEL_DEFAULT_VALUE
+import org.eclipse.lmos.operator.DEPLOYMENT_SUBSET_LABEL_KEY
 import org.eclipse.lmos.operator.reconciler.AgentSpecification
 import org.eclipse.lmos.operator.resources.AgentResource
 import org.eclipse.lmos.operator.resources.AgentSpec
