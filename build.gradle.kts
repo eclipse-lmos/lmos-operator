@@ -188,7 +188,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     implementation("io.javaoperatorsdk:operator-framework-spring-boot-starter:$operatorFrameworkVersion")
-    implementation("io.fabric8:generator-annotations:7.3.1")
+    implementation("io.fabric8:generator-annotations:7.4.0")
 
     implementation("net.logstash.logback:logstash-logback-encoder:8.1")
 
@@ -201,7 +201,7 @@ dependencies {
     }
 
     implementation("org.eclipse.lmos:lmos-classifier-vector-spring-boot-starter:0.9.0")
-    implementation("io.fabric8", "generator-annotations", "7.3.1")
+    implementation("io.fabric8", "generator-annotations", "7.4.0")
     kapt("io.fabric8", "crd-generator-apt", "6.13.4")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
