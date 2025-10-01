@@ -53,6 +53,7 @@ class AgentDeploymentReconciler(
                 val agentSpec = agentClient.get(agentSpecUrl, AgentSpecification::class.java)
                 val agentResource = AgentGenerator.createAgentResource(deployment, agentSpec)
                 kubernetesResourceManager.createAgentResource(agentResource)
+                log.info("Creating agent resource '{}' in namespace '{}'.", agentResource.metadata.name, agentResource.metadata.namespace)
                 return UpdateControl.noUpdate()
             } catch (e: Exception) {
                 throw IllegalStateException("Failed to create agent resource for deployment '${deployment.metadata.name}'.", e)
