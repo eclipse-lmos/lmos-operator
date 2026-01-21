@@ -189,7 +189,7 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus")
 
     implementation("io.javaoperatorsdk:operator-framework-spring-boot-starter:$operatorFrameworkVersion")
-    implementation("io.fabric8:generator-annotations:7.4.0")
+    implementation("io.fabric8:generator-annotations:7.5.1")
 
     implementation("net.logstash.logback:logstash-logback-encoder:8.1")
 
@@ -202,7 +202,7 @@ dependencies {
     }
 
     implementation("org.eclipse.lmos:lmos-classifier-vector-spring-boot-starter:0.10.0")
-    implementation("io.fabric8", "generator-annotations", "7.4.0")
+    implementation("io.fabric8", "generator-annotations", "7.5.1")
     kapt("io.fabric8", "crd-generator-apt", "6.13.4")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
