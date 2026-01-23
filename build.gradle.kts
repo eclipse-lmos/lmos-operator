@@ -10,14 +10,15 @@ import java.net.URI
 plugins {
     java
     val kotlinVersion = "2.3.10"
+    val helmVersion = "3.1.1"
     id("org.springframework.boot") version "3.4.5"
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jlleitschuh.gradle.ktlint") version "14.0.1"
     id("io.spring.dependency-management") version "1.1.7"
-    id("org.cadixdev.licenser") version "0.6.1"
+    id("dev.yumi.gradle.licenser") version "2.2.2"
 
-    id("com.citi.helm") version "2.2.0"
-    id("com.citi.helm-publish") version "2.2.0"
+    id("io.github.build-extensions-oss.helm") version helmVersion
+    id("io.github.build-extensions-oss.helm-publish") version helmVersion
     id("net.researchgate.release") version "3.1.0"
     id("com.vanniktech.maven.publish") version "0.34.0"
     kotlin("jvm") version kotlinVersion
@@ -37,6 +38,7 @@ ktlint {
 }
 
 license {
+    rule(file("LICENSE"))
     include("**/*.java")
     include("**/*.kt")
     include("**/*.yaml")
@@ -119,18 +121,8 @@ helm {
     charts {
         create("main") {
             chartName.set("${rootProject.name}-chart")
-            chartVersion.set("${project.version}")
             sourceDir.set(file("src/main/helm"))
         }
-    }
-}
-
-tasks.register("replaceChartVersion") {
-    doLast {
-        val chartFile = file("src/main/helm/Chart.yaml")
-        val content = chartFile.readText()
-        val updatedContent = content.replace("\${chartVersion}", "${project.version}")
-        chartFile.writeText(updatedContent)
     }
 }
 
