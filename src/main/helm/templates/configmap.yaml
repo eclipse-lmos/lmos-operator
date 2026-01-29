@@ -36,4 +36,14 @@ data:
   LMOS_ROUTER_EMBEDDING_STORE_TLSENABLED: {{ .Values.embeddingStoreTlsEnabled | quote }}
   {{- end -}}
 
+  {{/* ---------- Tenant/Channel blacklist Configuration ---------- */}}
+
+  {{- if .Values.embeddingBlacklistTenants }}
+  LMOS_ROUTER_EMBEDDING_BLACKLIST_TENANTS: {{ join "," .Values.embeddingBlacklistTenants | quote }}
+  {{- end -}}
+
+  {{- if .Values.embeddingBlacklistChannels }}
+  LMOS_ROUTER_EMBEDDING_BLACKLIST_CHANNELS: {{ join "," .Values.embeddingBlacklistChannels | quote }}
+  {{- end -}}
+
  {{- end }}

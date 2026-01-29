@@ -141,6 +141,8 @@ embeddingModelProvider: "openai"
 embeddingStoreHost: "localhost"
 embeddingStorePort: 6334
 embeddingStoreTlsEnabled: false
+embeddingBlacklistTenants: []
+embeddingBlacklistChannels: []
 
 # Set to true if the secret containing the LLM API key should be created by helm.
 # If set to false, a secret named <secretName> must be available in the cluster.

@@ -23,6 +23,7 @@ import org.eclipse.lmos.operator.resources.AgentResource
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 
 private const val ERROR_RETRY_INITIAL_INTERVAL_MS = 5000L
@@ -44,6 +45,7 @@ private const val ERROR_RETRY_MAX_ATTEMPTS = 3
 )
 class AgentEmbeddingReconciler(
     private val embeddingHandler: EmbeddingHandler,
+    private val embeddingProperties: EmbeddingProperties,
 ) : Reconciler<AgentResource>,
     Cleaner<AgentResource> {
     private val log: Logger = LoggerFactory.getLogger(javaClass)
@@ -54,6 +56,13 @@ class AgentEmbeddingReconciler(
     ): UpdateControl<AgentResource> {
         log.info("Agent reconcile: Manage embeddings for agent '${agentResource.metadata.name}'")
         agentResource.convertToContextAgentMap().forEach { (context, agent) ->
+            if (isBlacklisted(context)) {
+                log.info(
+                    "Skip embedding handling for tenant '${context.tenantId}' and channel '${context.channelId}' of agent '${agent.id}', " +
+                        "because of embedding blacklist (tenants=${embeddingProperties.blacklist.tenants}) | channels=${embeddingProperties.blacklist.channels})",
+                )
+                return@forEach
+            }
             try {
                 embeddingHandler.ingest(context, agent)
             } catch (e: Exception) {
@@ -84,6 +93,11 @@ class AgentEmbeddingReconciler(
             }
         }
         return DeleteControl.defaultDelete()
+    }
+
+    private fun isBlacklisted(systemContext: SystemContext): Boolean {
+        val blacklist = embeddingProperties.blacklist
+        return blacklist.tenants.contains(systemContext.tenantId) || blacklist.channels.contains(systemContext.channelId)
     }
 
     private fun AgentResource.convertToContextAgentMap(): Map<SystemContext, Agent> {
@@ -131,4 +145,14 @@ class AgentEmbeddingReconciler(
             }
         }
     }
+}
+
+@ConfigurationProperties(prefix = "lmos.router.embedding")
+data class EmbeddingProperties(
+    val blacklist: Blacklist = Blacklist(),
+) {
+    data class Blacklist(
+        val tenants: Set<String> = emptySet(),
+        val channels: Set<String> = emptySet(),
+    )
 }

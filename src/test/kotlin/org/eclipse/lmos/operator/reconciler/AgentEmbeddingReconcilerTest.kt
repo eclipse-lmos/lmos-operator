@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test
 
 class AgentEmbeddingReconcilerTest {
     private val embeddingHandler = mockk<EmbeddingHandler>()
-    private val underTest = AgentEmbeddingReconciler(embeddingHandler)
+    private val underTest = AgentEmbeddingReconciler(embeddingHandler, EmbeddingProperties())
 
     private val agentResource =
         AgentResource().apply {
@@ -135,6 +135,41 @@ class AgentEmbeddingReconcilerTest {
             embeddingHandler.ingest(
                 match<SystemContext> { it.tenantId == "myTenant" && it.channelId == "myChannel" && it.subset == "stable" },
                 match<Agent> { it.id == "ordering-agent-id" },
+            )
+        }
+    }
+
+    @Test
+    fun `reconcile skips ingest for blacklisted tenants and channels`() {
+        // given
+        val embeddingProperties =
+            EmbeddingProperties(
+                blacklist =
+                    EmbeddingProperties.Blacklist(
+                        tenants = setOf("myTenant"),
+                        channels = setOf("anotherChannel"),
+                    ),
+            )
+        val underTest = AgentEmbeddingReconciler(embeddingHandler, embeddingProperties)
+        every { embeddingHandler.ingest(any<SystemContext>(), any<Agent>()) } just Runs
+
+        // when
+        val result = underTest.reconcile(agentResource, mockk<Context<AgentResource>>())
+
+        // then
+        assertThat(result.isNoUpdate).isTrue()
+
+        verify(exactly = 0) {
+            embeddingHandler.ingest(
+                match<SystemContext> { it.tenantId == "myTenant" && it.channelId == "myChannel" },
+                any<Agent>(),
+            )
+        }
+
+        verify(exactly = 0) {
+            embeddingHandler.ingest(
+                match<SystemContext> { it.tenantId == "myTenant" && it.channelId == "anotherChannel" },
+                any<Agent>(),
             )
         }
     }
