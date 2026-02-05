@@ -9,7 +9,7 @@ import java.net.URI
 
 plugins {
     java
-    val kotlinVersion = "2.3.0"
+    val kotlinVersion = "2.3.10"
     id("org.springframework.boot") version "3.4.5"
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jlleitschuh.gradle.ktlint") version "14.0.1"
