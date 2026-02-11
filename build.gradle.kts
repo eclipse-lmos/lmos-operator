@@ -20,7 +20,7 @@ plugins {
     id("io.github.build-extensions-oss.helm") version helmVersion
     id("io.github.build-extensions-oss.helm-publish") version helmVersion
     id("net.researchgate.release") version "3.1.0"
-    id("com.vanniktech.maven.publish") version "0.34.0"
+    id("com.vanniktech.maven.publish") version "0.36.0"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
 }
