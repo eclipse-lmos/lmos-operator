@@ -14,6 +14,7 @@ import org.eclipse.lmos.operator.reconciler.AgentSpecification
 import org.eclipse.lmos.operator.resources.AgentResource
 import org.eclipse.lmos.operator.resources.AgentSpec
 import org.eclipse.lmos.operator.resources.ProvidedCapability
+import org.eclipse.lmos.operator.resources.RolloutResource
 
 const val DEPLOYMENT_LABEL_KEY_AGENT = "lmos-agent"
 
@@ -34,6 +35,44 @@ object AgentGenerator {
         val agentSpec =
             AgentSpec(
                 id = deployment.metadata.name,
+                description = agentSpecification.description,
+                supportedTenants = agentSpecification.supportedTenants,
+                supportedChannels = agentSpecification.supportedChannels,
+                providedCapabilities =
+                    agentSpecification.capabilities
+                        .map {
+                            ProvidedCapability(
+                                id = it.id,
+                                name = it.name,
+                                version = it.version,
+                                description = it.description,
+                                examples = it.examples,
+                            )
+                        }.toSet(),
+            )
+        val agentResource = AgentResource()
+        agentResource.metadata = agentMetadata
+        agentResource.spec = agentSpec
+
+        return agentResource
+    }
+
+    fun createAgentResource(
+        rollout: RolloutResource,
+        agentSpecification: AgentSpecification,
+    ): AgentResource {
+        val subset = rollout.metadata.labels[DEPLOYMENT_SUBSET_LABEL_KEY] ?: DEPLOYMENT_SUBSET_LABEL_DEFAULT_VALUE
+        val agentMetadata =
+            ObjectMetaBuilder()
+                .withName(rollout.metadata.name)
+                .withNamespace(rollout.metadata.namespace)
+                .addToLabels(DEPLOYMENT_LABEL_KEY_AGENT, "true")
+                .addToLabels(DEPLOYMENT_SUBSET_LABEL_KEY, subset)
+                .build()
+
+        val agentSpec =
+            AgentSpec(
+                id = rollout.metadata.name,
                 description = agentSpecification.description,
                 supportedTenants = agentSpecification.supportedTenants,
                 supportedChannels = agentSpecification.supportedChannels,

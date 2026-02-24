@@ -61,6 +61,10 @@ spec:
           {{- with .Values.env }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- if eq .Values.argoRolloutSupport.enabled true }}
+            - name: lmos.operator.rollout.enabled
+              value: "true"
+          {{- end }}
           {{- if eq .Values.embeddingEnabled true }}
           envFrom:
             - configMapRef:
