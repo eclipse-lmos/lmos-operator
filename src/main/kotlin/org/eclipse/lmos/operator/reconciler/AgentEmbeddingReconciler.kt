@@ -26,12 +26,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 
-private const val ERROR_RETRY_INITIAL_INTERVAL_MS = 5000L
-private const val ERROR_RETRY_INTERVAL_MULTIPLIER = 1.5
-private const val ERROR_RETRY_MAX_ATTEMPTS = 3
-
 @Component
-@ControllerConfiguration(labelSelector = "lmos-agent=true")
+@ControllerConfiguration(labelSelector = LABEL_SELECTOR)
 @GradualRetry(
     initialInterval = ERROR_RETRY_INITIAL_INTERVAL_MS,
     intervalMultiplier = ERROR_RETRY_INTERVAL_MULTIPLIER,

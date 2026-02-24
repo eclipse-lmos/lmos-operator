@@ -11,6 +11,7 @@ import io.fabric8.kubernetes.api.model.StatusDetails
 import io.fabric8.kubernetes.api.model.apps.Deployment
 import io.fabric8.kubernetes.client.KubernetesClient
 import org.eclipse.lmos.operator.resources.AgentResource
+import org.eclipse.lmos.operator.resources.RolloutResource
 import org.slf4j.LoggerFactory
 
 @org.springframework.stereotype.Service
@@ -34,6 +35,16 @@ class KubernetesResourceManager(
         log.info("Deleted Agent Resources for deployment '{}', status '{}'.", deployment.metadata.name, deleteStatus)
     }
 
+    fun deleteAgentResource(rollout: RolloutResource) {
+        val deleteStatus: List<StatusDetails> =
+            kubernetesClient
+                .resources(AgentResource::class.java)
+                .inNamespace(rollout.metadata.namespace)
+                .withName(rollout.metadata.name)
+                .delete()
+        log.info("Deleted Agent Resources for rollout '{}', status '{}'.", rollout.metadata.name, deleteStatus)
+    }
+
     fun isDeploymentReady(deployment: Deployment): Boolean {
         val replicas = deployment.status.replicas
         val desiredReplicas = deployment.spec.replicas
@@ -46,11 +57,37 @@ class KubernetesResourceManager(
         )
     }
 
+    fun isRolloutReady(rollout: RolloutResource): Boolean {
+        val replicas = rollout.status?.replicas
+        val desiredReplicas = rollout.spec?.replicas
+        val availableReplicas = rollout.status?.availableReplicas
+        return (
+            replicas != null &&
+                desiredReplicas != null &&
+                availableReplicas != null &&
+                replicas == desiredReplicas &&
+                availableReplicas == desiredReplicas
+        )
+    }
+
     fun getServiceUrl(
         deployment: Deployment,
         path: String,
     ): String {
         val service = findService(deployment)
+        val baseUrl = getBaseUrl(service)
+        return if (path.startsWith("/")) {
+            "$baseUrl$path"
+        } else {
+            "$baseUrl/$path"
+        }.apply { log.info("Determined service URL: $this") }
+    }
+
+    fun getServiceUrl(
+        rollout: RolloutResource,
+        path: String,
+    ): String {
+        val service = findService(rollout)
         val baseUrl = getBaseUrl(service)
         return if (path.startsWith("/")) {
             "$baseUrl$path"
@@ -85,6 +122,37 @@ class KubernetesResourceManager(
                 "Expected exactly one service for deployment $name, but got ${matchingServices.size}; $matchingServices",
             )
             throw IllegalStateException("Expected exactly one service for deployment $name, but got ${matchingServices.size}")
+        }
+
+        return matchingServices.first()
+    }
+
+    private fun findService(rollout: RolloutResource): Service {
+        val rolloutPodLabels =
+            rollout.spec
+                ?.template
+                ?.metadata
+                ?.labels ?: emptyMap()
+
+        val servicesInNamespace =
+            kubernetesClient
+                .services()
+                .inNamespace(rollout.metadata.namespace)
+                .list()
+
+        val matchingServices =
+            servicesInNamespace.items.filter { service ->
+                val selectors = service.spec?.selector
+                if (selectors.isNullOrEmpty()) return@filter false
+                selectors.all { (key, value) -> rolloutPodLabels[key] == value }
+            }
+
+        if (matchingServices.size != 1) {
+            val name = rollout.metadata.name
+            log.error(
+                "Expected exactly one service for rollout $name, but got ${matchingServices.size}; $matchingServices",
+            )
+            throw IllegalStateException("Expected exactly one service for rollout $name, but got ${matchingServices.size}")
         }
 
         return matchingServices.first()

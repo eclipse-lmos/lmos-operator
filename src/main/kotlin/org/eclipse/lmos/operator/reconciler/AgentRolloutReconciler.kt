@@ -6,7 +6,6 @@
 
 package org.eclipse.lmos.operator.reconciler
 
-import io.fabric8.kubernetes.api.model.apps.Deployment
 import io.javaoperatorsdk.operator.api.reconciler.Cleaner
 import io.javaoperatorsdk.operator.api.reconciler.Context
 import io.javaoperatorsdk.operator.api.reconciler.ControllerConfiguration
@@ -17,11 +16,13 @@ import io.javaoperatorsdk.operator.processing.retry.GradualRetry
 import org.eclipse.lmos.operator.reconciler.client.AgentClient
 import org.eclipse.lmos.operator.reconciler.generator.AgentGenerator
 import org.eclipse.lmos.operator.reconciler.k8s.KubernetesResourceManager
+import org.eclipse.lmos.operator.resources.RolloutResource
 import org.slf4j.LoggerFactory
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
 
-private const val DEPLOYMENT_NOT_READY_RECONCILE_INTERVAL_SECONDS = 10L
+private const val ROLLOUT_NOT_READY_RECONCILE_INTERVAL_SECONDS = 10L
 
 @Component
 @ControllerConfiguration(labelSelector = LABEL_SELECTOR)
@@ -30,56 +31,46 @@ private const val DEPLOYMENT_NOT_READY_RECONCILE_INTERVAL_SECONDS = 10L
     intervalMultiplier = ERROR_RETRY_INTERVAL_MULTIPLIER,
     maxAttempts = ERROR_RETRY_MAX_ATTEMPTS,
 )
-class AgentDeploymentReconciler(
+@ConditionalOnProperty(
+    prefix = "lmos.operator.rollout",
+    name = ["enabled"],
+    havingValue = "true",
+    matchIfMissing = false,
+)
+class AgentRolloutReconciler(
     private val kubernetesResourceManager: KubernetesResourceManager,
     private val agentClient: AgentClient,
-) : Reconciler<Deployment>,
-    Cleaner<Deployment> {
+) : Reconciler<RolloutResource>,
+    Cleaner<RolloutResource> {
     private val log = LoggerFactory.getLogger(javaClass)
 
     override fun reconcile(
-        deployment: Deployment,
-        context: Context<Deployment>,
-    ): UpdateControl<Deployment> {
-        val deploymentReady = kubernetesResourceManager.isDeploymentReady(deployment)
-        if (deploymentReady) {
-            log.info("Deployment reconcile: Create agent resource for deployment '{}'.", deployment.metadata.name)
+        rollout: RolloutResource,
+        context: Context<RolloutResource>,
+    ): UpdateControl<RolloutResource> {
+        val rolloutReady = kubernetesResourceManager.isRolloutReady(rollout)
+        if (rolloutReady) {
+            log.info("Rollout reconcile: Create agent resource for rollout '{}'.", rollout.metadata.name)
             try {
-                val agentSpecUrl = kubernetesResourceManager.getServiceUrl(deployment, WELL_KNOWN_AGENT_SPEC_ENDPOINT)
+                val agentSpecUrl = kubernetesResourceManager.getServiceUrl(rollout, WELL_KNOWN_AGENT_SPEC_ENDPOINT)
                 val agentSpec = agentClient.get(agentSpecUrl, AgentSpecification::class.java)
-                val agentResource = AgentGenerator.createAgentResource(deployment, agentSpec)
+                val agentResource = AgentGenerator.createAgentResource(rollout, agentSpec)
                 kubernetesResourceManager.createAgentResource(agentResource)
                 log.info("Creating agent resource '{}' in namespace '{}'.", agentResource.metadata.name, agentResource.metadata.namespace)
                 return UpdateControl.noUpdate()
             } catch (e: Exception) {
-                throw IllegalStateException("Failed to create agent resource for deployment '${deployment.metadata.name}'.", e)
+                throw IllegalStateException("Failed to create agent resource for rollout '${rollout.metadata.name}'.", e)
             }
         }
-        return UpdateControl.noUpdate<Deployment>().rescheduleAfter(DEPLOYMENT_NOT_READY_RECONCILE_INTERVAL_SECONDS, TimeUnit.SECONDS)
+        return UpdateControl.noUpdate<RolloutResource>().rescheduleAfter(ROLLOUT_NOT_READY_RECONCILE_INTERVAL_SECONDS, TimeUnit.SECONDS)
     }
 
     override fun cleanup(
-        deployment: Deployment,
-        context: Context<Deployment?>?,
+        rollout: RolloutResource,
+        context: Context<RolloutResource?>?,
     ): DeleteControl {
-        log.info("Deployment cleanup: Delete agent resource '{}' due to reconcile.", deployment.metadata.name)
-        kubernetesResourceManager.deleteAgentResource(deployment)
+        log.info("Rollout cleanup: Delete agent resource '{}' due to reconcile.", rollout.metadata.name)
+        kubernetesResourceManager.deleteAgentResource(rollout)
         return DeleteControl.defaultDelete()
     }
 }
-
-data class AgentSpecification(
-    val id: String,
-    val description: String,
-    val supportedTenants: Set<String>,
-    val supportedChannels: Set<String>,
-    val capabilities: List<CapabilitySpecification>,
-)
-
-data class CapabilitySpecification(
-    val id: String,
-    val name: String,
-    val version: String,
-    val description: String,
-    val examples: List<String>,
-)
