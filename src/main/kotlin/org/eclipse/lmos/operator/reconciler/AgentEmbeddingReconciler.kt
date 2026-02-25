@@ -6,6 +6,7 @@
 
 package org.eclipse.lmos.operator.reconciler
 
+import io.javaoperatorsdk.operator.api.config.informer.Informer
 import io.javaoperatorsdk.operator.api.reconciler.Cleaner
 import io.javaoperatorsdk.operator.api.reconciler.Context
 import io.javaoperatorsdk.operator.api.reconciler.ControllerConfiguration
@@ -27,7 +28,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 
 @Component
-@ControllerConfiguration(labelSelector = LABEL_SELECTOR)
+@ControllerConfiguration
+@Informer(labelSelector = LABEL_SELECTOR)
 @GradualRetry(
     initialInterval = ERROR_RETRY_INITIAL_INTERVAL_MS,
     intervalMultiplier = ERROR_RETRY_INTERVAL_MULTIPLIER,

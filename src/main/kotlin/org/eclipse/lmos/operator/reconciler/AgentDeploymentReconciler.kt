@@ -7,6 +7,7 @@
 package org.eclipse.lmos.operator.reconciler
 
 import io.fabric8.kubernetes.api.model.apps.Deployment
+import io.javaoperatorsdk.operator.api.config.informer.Informer
 import io.javaoperatorsdk.operator.api.reconciler.Cleaner
 import io.javaoperatorsdk.operator.api.reconciler.Context
 import io.javaoperatorsdk.operator.api.reconciler.ControllerConfiguration
@@ -24,7 +25,8 @@ import java.util.concurrent.TimeUnit
 private const val DEPLOYMENT_NOT_READY_RECONCILE_INTERVAL_SECONDS = 10L
 
 @Component
-@ControllerConfiguration(labelSelector = LABEL_SELECTOR)
+@ControllerConfiguration
+@Informer(labelSelector = LABEL_SELECTOR)
 @GradualRetry(
     initialInterval = ERROR_RETRY_INITIAL_INTERVAL_MS,
     intervalMultiplier = ERROR_RETRY_INTERVAL_MULTIPLIER,

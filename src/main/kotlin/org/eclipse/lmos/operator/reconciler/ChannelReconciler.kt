@@ -6,13 +6,13 @@
 
 package org.eclipse.lmos.operator.reconciler
 
-import io.javaoperatorsdk.operator.api.config.informer.InformerConfiguration
+import io.javaoperatorsdk.operator.api.config.informer.InformerEventSourceConfiguration
 import io.javaoperatorsdk.operator.api.reconciler.Context
 import io.javaoperatorsdk.operator.api.reconciler.ControllerConfiguration
 import io.javaoperatorsdk.operator.api.reconciler.EventSourceContext
-import io.javaoperatorsdk.operator.api.reconciler.EventSourceInitializer
 import io.javaoperatorsdk.operator.api.reconciler.Reconciler
 import io.javaoperatorsdk.operator.api.reconciler.UpdateControl
+import io.javaoperatorsdk.operator.api.reconciler.Workflow
 import io.javaoperatorsdk.operator.api.reconciler.dependent.Dependent
 import io.javaoperatorsdk.operator.processing.event.ResourceID
 import io.javaoperatorsdk.operator.processing.event.source.EventSource
@@ -24,10 +24,9 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-@ControllerConfiguration(dependents = [Dependent(type = ChannelDependentResource::class)])
-class ChannelReconciler :
-    Reconciler<ChannelResource>,
-    EventSourceInitializer<ChannelResource> {
+@ControllerConfiguration
+@Workflow(dependents = [Dependent(type = ChannelDependentResource::class)])
+class ChannelReconciler : Reconciler<ChannelResource> {
     private val log: Logger = LoggerFactory.getLogger(javaClass)
 
     override fun reconcile(
@@ -44,11 +43,11 @@ class ChannelReconciler :
         return UpdateControl.patchStatus(channelResource)
     }
 
-    override fun prepareEventSources(context: EventSourceContext<ChannelResource>): Map<String, EventSource> {
+    override fun prepareEventSources(context: EventSourceContext<ChannelResource>): List<EventSource<*, ChannelResource>> {
         val config =
-            InformerConfiguration
-                .from(AgentResource::class.java)
-                .withSecondaryToPrimaryMapper { agent ->
+            InformerEventSourceConfiguration
+                .from(AgentResource::class.java, ChannelResource::class.java)
+                .withSecondaryToPrimaryMapper { agent: AgentResource ->
                     context.client
                         .resources(ChannelResource::class.java)
                         // At this point, AgentResourcesFilter could be used to find the matching Channels for the given Agent.
@@ -64,6 +63,6 @@ class ChannelReconciler :
                         .map { ResourceID(it.metadata.name, it.metadata.namespace) }
                         .toSet()
                 }.build()
-        return EventSourceInitializer.nameEventSources(InformerEventSource(config, context))
+        return listOf(InformerEventSource(config, context))
     }
 }

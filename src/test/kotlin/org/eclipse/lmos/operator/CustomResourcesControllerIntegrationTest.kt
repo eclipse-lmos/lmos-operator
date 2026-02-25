@@ -75,7 +75,7 @@ class CustomResourcesControllerIntegrationTest {
     @Test
     fun shouldReturnChannelResource() {
         // Given I create an ChannelResource
-        client.load(getResource("acme-web-channel-v1.yaml")).createOrReplace()
+        client.load(getResource("acme-web-channel-v1.yaml")).serverSideApply()
 
         // When I call the API
         val result =

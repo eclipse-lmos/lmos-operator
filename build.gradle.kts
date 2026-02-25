@@ -11,7 +11,7 @@ plugins {
     java
     val kotlinVersion = "2.3.10"
     val helmVersion = "3.1.1"
-    id("org.springframework.boot") version "3.4.5"
+    id("org.springframework.boot") version "3.5.11"
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jlleitschuh.gradle.ktlint") version "14.0.1"
     id("io.spring.dependency-management") version "1.1.7"
@@ -173,7 +173,7 @@ repositories {
 }
 
 dependencies {
-    val operatorFrameworkVersion = "5.6.0"
+    val operatorFrameworkVersion = "6.2.0"
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
