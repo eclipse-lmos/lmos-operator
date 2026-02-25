@@ -12,7 +12,7 @@ plugins {
     java
     val kotlinVersion = "2.3.10"
     val helmVersion = "3.1.1"
-    id("org.springframework.boot") version "3.5.11"
+    id("org.springframework.boot") version "4.0.3"
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jlleitschuh.gradle.ktlint") version "14.0.1"
     id("io.spring.dependency-management") version "1.1.7"
@@ -180,7 +180,7 @@ repositories {
 }
 
 dependencies {
-    val operatorFrameworkVersion = "6.2.0"
+    val operatorFrameworkVersion = "6.3.3"
     val fabric8Version = "7.5.2"
     val testcontainersVersion = "1.21.4"
     implementation("org.springframework.boot:spring-boot-starter")
