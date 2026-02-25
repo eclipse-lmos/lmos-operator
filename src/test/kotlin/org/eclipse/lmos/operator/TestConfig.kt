@@ -62,19 +62,21 @@ class TestConfig {
         Stream
             .concat(properties.crdPaths.stream(), properties.globalCrdPaths.stream())
             .forEach { crdPath: String? ->
-                val crd: CustomResourceDefinition
-                try {
-                    crd = Serialization.unmarshal(FileInputStream(ResourceUtils.getFile(crdPath)))
-                } catch (e: FileNotFoundException) {
-                    log.warn("CRD with path {} not found!", crdPath)
-                    e.printStackTrace()
-                    return@forEach
+                if (crdPath != null) {
+                    val crd: CustomResourceDefinition
+                    try {
+                        crd = Serialization.unmarshal(FileInputStream(ResourceUtils.getFile(crdPath)))
+                    } catch (e: FileNotFoundException) {
+                        log.warn("CRD with path {} not found!", crdPath)
+                        e.printStackTrace()
+                        return@forEach
+                    }
+                    client
+                        .apiextensions()
+                        .v1()
+                        .customResourceDefinitions()
+                        .create(crd)
                 }
-                client
-                    .apiextensions()
-                    .v1()
-                    .customResourceDefinitions()
-                    .create(crd)
             }
 
         return client

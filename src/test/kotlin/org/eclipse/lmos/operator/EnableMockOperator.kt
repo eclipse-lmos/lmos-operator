@@ -6,7 +6,7 @@
 
 package org.eclipse.lmos.operator
 
-import org.springframework.boot.test.autoconfigure.properties.PropertyMapping
+import org.springframework.boot.test.context.PropertyMapping
 import org.springframework.context.annotation.Import
 
 @Retention(AnnotationRetention.RUNTIME)

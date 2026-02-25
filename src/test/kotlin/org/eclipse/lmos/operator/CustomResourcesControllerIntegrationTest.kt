@@ -15,8 +15,8 @@ import org.eclipse.lmos.operator.server.routing.X_SUBSET_HEADER
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.util.ResourceUtils
 import java.io.FileInputStream
@@ -28,10 +28,10 @@ import java.io.FileInputStream
 @AutoConfigureWebTestClient
 @EnableMockOperator(
     crdPaths = [
-        "classpath:META-INF/fabric8/channels.lmos.eclipse-v1.yml",
-        "classpath:META-INF/fabric8/agents.lmos.eclipse-v1.yml",
-        "classpath:META-INF/fabric8/channelroutings.lmos.eclipse-v1.yml",
-        "classpath:META-INF/fabric8/channelrollouts.lmos.eclipse-v1.yml",
+        "classpath:channels.lmos.eclipse-v1.yml",
+        "classpath:agents.lmos.eclipse-v1.yml",
+        "classpath:channelroutings.lmos.eclipse-v1.yml",
+        "classpath:channelrollouts.lmos.eclipse-v1.yml",
     ],
 )
 class CustomResourcesControllerIntegrationTest {

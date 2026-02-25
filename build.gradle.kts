@@ -3,16 +3,20 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
+import io.fabric8.crd.generator.collector.CustomResourceCollector
+import io.fabric8.crdv2.generator.CRDGenerationInfo
+import io.fabric8.crdv2.generator.CRDGenerator
+import org.gradle.api.internal.tasks.JvmConstants
+import org.gradle.api.plugins.JavaPluginExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
-import java.lang.System.getenv
-import java.net.URI
+import java.nio.file.Files
 
 plugins {
-    java
+    id("java")
     val kotlinVersion = "2.3.20"
     val helmVersion = "3.1.1"
-    id("org.springframework.boot") version "4.0.5"
+    id("org.springframework.boot") version "4.0.3"
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
     id("io.spring.dependency-management") version "1.1.7"
@@ -23,10 +27,10 @@ plugins {
     id("net.researchgate.release") version "3.1.0"
     id("com.vanniktech.maven.publish") version "0.36.0"
     kotlin("jvm") version kotlinVersion
-    kotlin("kapt") version kotlinVersion
 }
 
 group = "org.eclipse.lmos"
+val fabric8Version = "7.5.2"
 
 kotlin {
     compilerOptions {
@@ -87,17 +91,6 @@ mavenPublishing {
     release {
         newVersionCommitMessage = "New Snapshot-Version:"
         preTagCommitMessage = "Release:"
-    }
-
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = URI("https://maven.pkg.github.com/eclipse-lmos/lmos-operator")
-            credentials {
-                username = findProperty("GITHUB_USER")?.toString() ?: getenv("GITHUB_USER")
-                password = findProperty("GITHUB_TOKEN")?.toString() ?: getenv("GITHUB_TOKEN")
-            }
-        }
     }
 }
 
@@ -179,10 +172,16 @@ repositories {
     mavenLocal()
 }
 
+buildscript {
+    dependencies {
+        classpath("io.fabric8:crd-generator-api-v2:7.5.2")
+        classpath("io.fabric8:crd-generator-collector:7.5.2")
+    }
+}
+
 dependencies {
     val operatorFrameworkVersion = "6.4.1"
     val fabric8Version = "7.6.1"
-    val testcontainersVersion = "1.21.4"
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -204,16 +203,16 @@ dependencies {
 
     implementation("org.eclipse.lmos:lmos-classifier-vector-spring-boot-starter:0.24.0")
     implementation("io.fabric8:generator-annotations:$fabric8Version")
-    kapt("io.fabric8:crd-generator-apt:$fabric8Version")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-webtestclient")
 
     testImplementation("org.awaitility:awaitility:4.3.0")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation(kotlin("stdlib-jdk8"))
-    testImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
-    testImplementation("org.testcontainers:k3s:$testcontainersVersion")
+    testImplementation("org.testcontainers:testcontainers-junit-jupiter")
+    testImplementation("org.testcontainers:testcontainers-k3s")
     testImplementation("org.bouncycastle:bcpkix-jdk18on:1.84")
     testImplementation("io.mockk:mockk:1.14.9")
 }
@@ -222,12 +221,40 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-tasks.withType<JavaCompile> {
-    options.annotationProcessorPath = configurations["kapt"]
+tasks.register("generateCrds") {
+    description = "Generate CRDs from compiled Custom Resource classes"
+    group = "crd"
+    val sourceSet = project.sourceSets["main"]
+    val compileClasspathElements = sourceSet.compileClasspath.map { it.absolutePath }
+    val outputClassesDirs = sourceSet.output.classesDirs
+    val outputClasspathElements = outputClassesDirs.map { it.absolutePath }
+    val classpathElements = listOf(outputClasspathElements, compileClasspathElements).flatten()
+    val filesToScan = listOf(outputClassesDirs).flatten()
+    val outputDir = sourceSet.output.resourcesDir
+
+    doLast {
+        Files.createDirectories(outputDir!!.toPath())
+        filesToScan.forEach { Files.createDirectories(it.toPath()) }
+        val collector =
+            CustomResourceCollector()
+                .withParentClassLoader(Thread.currentThread().contextClassLoader)
+                .withClasspathElements(classpathElements)
+                .withFilesToScan(filesToScan)
+
+        val crdGenerator =
+            CRDGenerator()
+                .customResourceClasses(collector.findCustomResourceClasses())
+                .inOutputDir(outputDir)
+
+        val crdGenerationInfo: CRDGenerationInfo = crdGenerator.detailedGenerate()
+
+        crdGenerationInfo.crdDetailsPerNameAndVersion.forEach { (crdName, versionToInfo) ->
+            println("Generated CRD $crdName:")
+            versionToInfo.forEach { (version, info) -> println(" $version -> ${info.filePath}") }
+        }
+    }
 }
 
-kapt {
-    arguments {
-        arg("crd.output.dir", "src/main/resources/META-INF/fabric8")
-    }
+tasks.named(JvmConstants.CLASSES_TASK_NAME) {
+    finalizedBy("generateCrds")
 }
