@@ -12,7 +12,7 @@ plugins {
     java
     val kotlinVersion = "2.3.10"
     val helmVersion = "3.1.1"
-    id("org.springframework.boot") version "3.5.11"
+    id("org.springframework.boot") version "4.0.3"
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.jlleitschuh.gradle.ktlint") version "14.0.1"
     id("io.spring.dependency-management") version "1.1.7"
