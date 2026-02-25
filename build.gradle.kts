@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 import java.lang.System.getenv
 import java.net.URI
@@ -27,9 +28,15 @@ plugins {
 
 group = "org.eclipse.lmos"
 
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_25
+    }
+}
+
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
