@@ -174,6 +174,8 @@ repositories {
 
 dependencies {
     val operatorFrameworkVersion = "6.2.0"
+    val fabric8Version = "7.5.2"
+    val testcontainersVersion = "1.21.4"
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -181,11 +183,11 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus")
 
     implementation("io.javaoperatorsdk:operator-framework-spring-boot-starter:$operatorFrameworkVersion")
-    implementation("io.fabric8:generator-annotations:7.5.2")
+    implementation("io.fabric8:generator-annotations:$fabric8Version")
 
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
 
-    implementation("com.fasterxml.jackson.module", "jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     implementation("org.semver4j:semver4j:6.0.0")
 
@@ -194,8 +196,8 @@ dependencies {
     }
 
     implementation("org.eclipse.lmos:lmos-classifier-vector-spring-boot-starter:0.23.0")
-    implementation("io.fabric8", "generator-annotations", "7.5.2")
-    kapt("io.fabric8", "crd-generator-apt", "6.13.4")
+    implementation("io.fabric8:generator-annotations:$fabric8Version")
+    kapt("io.fabric8:crd-generator-apt:$fabric8Version")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
@@ -203,10 +205,9 @@ dependencies {
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation(kotlin("stdlib-jdk8"))
-
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:k3s:1.21.4")
-    testImplementation("org.bouncycastle:bcpkix-jdk15on:1.70")
+    testImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
+    testImplementation("org.testcontainers:k3s:$testcontainersVersion")
+    testImplementation("org.bouncycastle:bcpkix-jdk18on:1.83")
     testImplementation("io.mockk:mockk:1.14.9")
 }
 
