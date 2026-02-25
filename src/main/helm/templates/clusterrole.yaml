@@ -23,6 +23,11 @@ rules:
     resources: [ "deployments" ]
     verbs: ["get", "list", "watch", "update", "patch"]
 
+  # Add permission to access rollouts in the apps API group
+  - apiGroups: [ "argoproj.io" ]
+    resources: [ "rollouts" ]
+    verbs: ["get", "list", "watch", "update", "patch"]
+
   # Add permission to access pods
   - apiGroups: [ "" ]
     resources: [ "pods" ]
