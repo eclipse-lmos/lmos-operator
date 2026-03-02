@@ -19,6 +19,7 @@ import org.eclipse.lmos.operator.resources.ChannelResource
 import org.eclipse.lmos.operator.resources.ChannelRoutingResource
 import org.eclipse.lmos.operator.resources.ChannelStatus
 import org.eclipse.lmos.operator.resources.ResolveStatus
+import org.eclipse.lmos.operator.alert.AlertClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -69,6 +70,12 @@ class ChannelDependentResource :
             val channelRoutingResource =
                 RoutingChannelGenerator.createChannelRoutingResource(channelResource, e.getResolvedWireCapabilities())
             log.error("Resolve failed for channel ${channelResource.metadata.name} in namespace $namespace", e)
+            // Emit alert with details about unresolved capabilities and reason
+            try {
+                AlertClient.sendUnresolvedChannelAlert(namespace, channelResource.metadata.name, e.getUnresolvedRequiredCapabilities(), e.message ?: "Unresolved capabilities")
+            } catch (ex: Exception) {
+                log.error("Failed to send unresolved channel alert: {}", ex.message, ex)
+            }
             channelResource.status = ChannelStatus(ResolveStatus.UNRESOLVED, e.getUnresolvedRequiredCapabilities())
             return channelRoutingResource
         }
