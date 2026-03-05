@@ -181,7 +181,7 @@ repositories {
 
 dependencies {
     val operatorFrameworkVersion = "6.2.0"
-    val fabric8Version = "7.6.0"
+    val fabric8Version = "7.6.1"
     val testcontainersVersion = "1.21.4"
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
