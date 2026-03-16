@@ -10,7 +10,7 @@ import java.net.URI
 
 plugins {
     java
-    val kotlinVersion = "2.3.10"
+    val kotlinVersion = "2.3.20"
     val helmVersion = "3.1.1"
     id("org.springframework.boot") version "3.5.11"
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
