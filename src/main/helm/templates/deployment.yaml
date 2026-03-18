@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "lmos-operator.labels" . | nindent 4 }}
 spec:
+  revisionHistoryLimit: 5
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
