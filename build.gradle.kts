@@ -192,7 +192,7 @@ dependencies {
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("tools.jackson.module:jackson-module-kotlin:3.0.4")
+    implementation("tools.jackson.module:jackson-module-kotlin:3.1.2")
 
     implementation("org.semver4j:semver4j:6.0.0")
 
