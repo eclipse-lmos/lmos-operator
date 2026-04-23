@@ -13,7 +13,7 @@ import java.nio.file.Files
 
 plugins {
     id("java")
-    val kotlinVersion = "2.3.20"
+    val kotlinVersion = "2.3.21"
     val helmVersion = "3.1.1"
     id("org.springframework.boot") version "4.0.5"
     id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
