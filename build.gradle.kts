@@ -200,7 +200,7 @@ dependencies {
         exclude(group = "org.apache.logging.log4j", module = "log4j-slf4j2-impl")
     }
 
-    implementation("org.eclipse.lmos:lmos-classifier-vector-spring-boot-starter:0.24.0")
+    implementation("org.eclipse.lmos:lmos-classifier-vector-spring-boot-starter:0.27.0")
     implementation("io.fabric8:generator-annotations:$fabric8Version")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
