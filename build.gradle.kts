@@ -173,8 +173,8 @@ repositories {
 
 buildscript {
     dependencies {
-        classpath("io.fabric8:crd-generator-api-v2:7.5.2")
-        classpath("io.fabric8:crd-generator-collector:7.5.2")
+        classpath("io.fabric8:crd-generator-api-v2:7.6.1")
+        classpath("io.fabric8:crd-generator-collector:7.6.1")
     }
 }
 
