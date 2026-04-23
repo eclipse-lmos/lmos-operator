@@ -13,11 +13,9 @@ import io.fabric8.kubernetes.client.KubernetesClient
 import io.fabric8.kubernetes.client.KubernetesClientBuilder
 import io.fabric8.kubernetes.client.utils.KubernetesSerialization
 import io.fabric8.kubernetes.client.utils.Serialization
-import io.javaoperatorsdk.operator.springboot.starter.OperatorAutoConfiguration
 import io.javaoperatorsdk.operator.springboot.starter.test.TestConfigurationProperties
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
@@ -29,7 +27,6 @@ import java.io.FileNotFoundException
 import java.util.stream.Stream
 
 @TestConfiguration
-@ImportAutoConfiguration(OperatorAutoConfiguration::class)
 @EnableConfigurationProperties(
     TestConfigurationProperties::class,
 )

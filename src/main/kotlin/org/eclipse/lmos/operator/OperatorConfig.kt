@@ -19,12 +19,21 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.web.reactive.function.client.WebClient
 import java.util.Optional
 
 @Configuration
 open class OperatorConfig {
     @Autowired
     private lateinit var configuration: OperatorConfigurationProperties
+
+    @Bean
+    @ConditionalOnMissingBean
+    open fun webClientBuilder(): WebClient.Builder = WebClient.builder()
+
+    @Bean
+    @ConditionalOnMissingBean
+    open fun objectMapper(): ObjectMapper = ObjectMapper().registerKotlinModule()
 
     @Bean
     @ConditionalOnMissingBean

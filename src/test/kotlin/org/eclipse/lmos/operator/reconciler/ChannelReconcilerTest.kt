@@ -28,10 +28,10 @@ import java.util.concurrent.TimeUnit
 )
 @EnableMockOperator(
     crdPaths = [
-        "classpath:META-INF/fabric8/channels.lmos.eclipse-v1.yml",
-        "classpath:META-INF/fabric8/agents.lmos.eclipse-v1.yml",
-        "classpath:META-INF/fabric8/channelroutings.lmos.eclipse-v1.yml",
-        "classpath:META-INF/fabric8/channelrollouts.lmos.eclipse-v1.yml",
+        "classpath:channels.lmos.eclipse-v1.yml",
+        "classpath:agents.lmos.eclipse-v1.yml",
+        "classpath:channelroutings.lmos.eclipse-v1.yml",
+        "classpath:channelrollouts.lmos.eclipse-v1.yml",
     ],
 )
 internal class ChannelReconcilerTest {

@@ -30,7 +30,7 @@ plugins {
 }
 
 group = "org.eclipse.lmos"
-val fabric8Version = "7.5.2"
+val fabric8Version = "7.6.1"
 
 kotlin {
     compilerOptions {
@@ -181,7 +181,6 @@ buildscript {
 
 dependencies {
     val operatorFrameworkVersion = "6.4.1"
-    val fabric8Version = "7.6.1"
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -194,6 +193,7 @@ dependencies {
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("tools.jackson.module:jackson-module-kotlin:3.0.4")
 
     implementation("org.semver4j:semver4j:6.0.0")
 
