@@ -25,8 +25,7 @@ import java.util.concurrent.TimeUnit
 private const val DEPLOYMENT_NOT_READY_RECONCILE_INTERVAL_SECONDS = 10L
 
 @Component
-@ControllerConfiguration
-@Informer(labelSelector = LABEL_SELECTOR)
+@ControllerConfiguration(informer = Informer(labelSelector = LABEL_SELECTOR))
 @GradualRetry(
     initialInterval = ERROR_RETRY_INITIAL_INTERVAL_MS,
     intervalMultiplier = ERROR_RETRY_INTERVAL_MULTIPLIER,
