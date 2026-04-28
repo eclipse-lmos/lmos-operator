@@ -6,6 +6,7 @@
 
 package org.eclipse.lmos.operator.resources
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import io.fabric8.kubernetes.api.model.LabelSelector
 import io.fabric8.kubernetes.api.model.Namespaced
 import io.fabric8.kubernetes.api.model.PodTemplateSpec
@@ -25,6 +26,7 @@ class RolloutResource :
     CustomResource<RolloutSpec, RolloutStatus>(),
     Namespaced
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class RolloutSpec(
     var replicas: Int? = null,
     var selector: LabelSelector? = null,
