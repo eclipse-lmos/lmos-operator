@@ -33,6 +33,7 @@ data class RolloutSpec(
     var template: PodTemplateSpec? = null,
 )
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class RolloutStatus(
     var replicas: Int? = null,
     var availableReplicas: Int? = null,
