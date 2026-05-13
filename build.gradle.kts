@@ -29,7 +29,7 @@ plugins {
 }
 
 group = "org.eclipse.lmos"
-val fabric8Version = "7.6.1"
+val fabric8Version = "7.7.0"
 
 kotlin {
     compilerOptions {
