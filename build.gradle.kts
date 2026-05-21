@@ -179,7 +179,7 @@ buildscript {
 }
 
 dependencies {
-    val operatorFrameworkVersion = "6.4.1"
+    val operatorFrameworkVersion = "6.4.2"
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
