@@ -213,7 +213,7 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers-junit-jupiter")
     testImplementation("org.testcontainers:testcontainers-k3s")
     testImplementation("org.bouncycastle:bcpkix-jdk18on:1.84")
-    testImplementation("io.mockk:mockk:1.14.9")
+    testImplementation("io.mockk:mockk:1.14.11")
 }
 
 tasks.withType<Test> {
