@@ -212,7 +212,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     testImplementation("org.testcontainers:testcontainers-junit-jupiter")
     testImplementation("org.testcontainers:testcontainers-k3s")
-    testImplementation("org.bouncycastle:bcpkix-jdk18on:1.86")
+    testImplementation("org.bouncycastle:bcpkix-jdk18on:1.87")
     testImplementation("io.mockk:mockk:1.14.12")
 }
 
