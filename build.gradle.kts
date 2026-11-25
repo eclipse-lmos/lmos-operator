@@ -194,7 +194,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("tools.jackson.module:jackson-module-kotlin:3.3.0")
 
-    implementation("org.semver4j:semver4j:6.0.0")
+    implementation("org.semver4j:semver4j:6.1.0")
 
     testImplementation("io.javaoperatorsdk:operator-framework-spring-boot-starter-test:$operatorFrameworkVersion") {
         exclude(group = "org.apache.logging.log4j", module = "log4j-slf4j2-impl")
